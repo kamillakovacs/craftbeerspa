@@ -31,5 +31,6 @@ export enum Action {
 
 export enum CanceledBy {
   User = "user",
-  BeerSpa = "beerspa"
+  BeerSpa = "beerspa",
+  PhoneCall = "phonecall"
 }

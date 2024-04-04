@@ -58,7 +58,8 @@ const Details: FC<Props> = ({ customerAlreadyInDatabase }) => {
       cancelationEmailSent: false
     },
     requirements: null,
-    termsAndConditions: false
+    termsAndConditions: false,
+    addToEmailList: false
   };
 
   const goBack = () => router.replace("/");
@@ -89,7 +90,8 @@ const Details: FC<Props> = ({ customerAlreadyInDatabase }) => {
         cancelationEmailSent: false
       },
       requirements: null,
-      termsAndConditions: false
+      termsAndConditions: values.termsAndConditions,
+      addToEmailList: values.addToEmailList
     };
 
     return redirectToStartPayment(reservationData);

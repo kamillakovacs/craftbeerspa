@@ -46,7 +46,8 @@ const Unsuccessful: FC<Props> = ({ customerAlreadyInDatabase, reservation }) => 
         cancelationEmailSent: reservation.communication.cancelationEmailSent
       },
       requirements: reservation.requirements,
-      termsAndConditions: reservation.termsAndConditions
+      termsAndConditions: reservation.termsAndConditions,
+      addToEmailList: reservation.addToEmailList
     };
 
     return redirectToStartPayment(reservationData);

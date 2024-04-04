@@ -19,13 +19,15 @@ import reservationStyles from "../styles/reservation.module.scss";
 import styles from "../styles/main.module.scss";
 import { ReservationDataShort } from "../lib/interfaces";
 
+import Logo from "../../public/assets/logo.svg";
+
 interface Props {
   currentReservations: ReservationDataShort[];
 }
 
 const Main: FC<Props> = ({ currentReservations }) => {
   const router = useRouter();
-  const [data, setData] = useAppContext();
+  const [_data, setData] = useAppContext();
   const { t } = useTranslation("common");
 
   const initialValues = {
@@ -68,7 +70,8 @@ const Main: FC<Props> = ({ currentReservations }) => {
         cancelationEmailSent: false
       },
       requirements: null,
-      termsAndConditions: false
+      termsAndConditions: false,
+      addToEmailList: false
     };
 
     return redirectToDetailsPage(reservationData);
@@ -76,6 +79,9 @@ const Main: FC<Props> = ({ currentReservations }) => {
 
   return (
     <article className={styles.main}>
+      <div className={styles.iconContainer}>
+        <Logo />
+      </div>
       <label className={reservationStyles.reservation__title}>
         <span>{t("index.reserveYourExperience")}</span>
       </label>

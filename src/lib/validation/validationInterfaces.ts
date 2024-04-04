@@ -21,6 +21,7 @@ export interface ReservationWithDetails {
   whereYouHeard: { label: string; value: string };
   requirements: string;
   termsAndConditions: boolean;
+  addToEmailList: boolean;
   paymentMethod: string;
   paymentStatus?: PaymentStatus;
   canceled: CanceledBy;
