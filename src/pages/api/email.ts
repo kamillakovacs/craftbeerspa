@@ -7,7 +7,7 @@ import { currencyFormat } from "../../lib/util/currencyFormat";
 import { ReservationWithDetails } from "../../lib/validation/validationInterfaces";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const { reservation, paymentId, language, action, date } = req.body;
+  const { reservation, paymentId, documentId, language, action, date } = req.body;
   const { firstName, lastName, email } = reservation;
   const database = firebase.database();
   const reservations = database.ref("reservations");
@@ -28,7 +28,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         : process.env.MAILERSEND_CONFIRMATION_TEMPLATE_ID_ENGLISH
     )
     .setPersonalization(getPersonalization(reservation.email, action))
-    .setVariables(getVariables(reservation, language, paymentId, action, date));
+    .setVariables(getVariables(reservation, language, paymentId, documentId, action, date));
 
   const emailParamsToCraftBeerSpa = new EmailParams()
     .setFrom(sentFrom)
@@ -82,11 +82,12 @@ const getVariables = (
   reservation: ReservationWithDetails,
   language: string,
   paymentId: string,
+  documentId: number,
   action: Action,
   amendedDate?: Date,
   adminEmail?: string
 ) => {
-  const { firstName, lastName, email, numberOfTubs, numberOfGuests, price } = reservation;
+  const { firstName, lastName, email, phoneNumber, numberOfTubs, numberOfGuests, price } = reservation;
 
   const date = getDate(language, amendedDate, reservation?.date);
 
@@ -122,6 +123,10 @@ const getVariables = (
           value: adminEmail ?? email
         },
         {
+          var: "phoneNumber",
+          value: phoneNumber
+        },
+        {
           var: "dateOfPurchase",
           value: dateOfPurchase
         },
@@ -154,8 +159,8 @@ const getVariables = (
           value: language === "hu-HU" ? "Rendezve" : "Paid"
         },
         {
-          var: "paymentId",
-          value: paymentId
+          var: "documentId",
+          value: documentId
         }
       ]
     }

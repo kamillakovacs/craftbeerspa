@@ -23,24 +23,23 @@ const Reservation: FC<Props> = ({ reservation, paymentId, customerAlreadyInDatab
   const { i18n } = useTranslation("common");
 
   useEffect(() => {
-    const createAndSendConfirmationEmail = async () =>
-      await axios
-        .post("/api/email", { reservation, paymentId, language: i18n.language, action: Action.None })
-        .then((res) => res.data)
-        .catch((e) => console.log(e));
-
     const createAndSendReceipt = async () =>
       await axios
         .post("/api/receipt", { reservation, paymentId })
+        .then((res) => res.data.documentId)
+        .catch((e) => console.log(e));
+
+    const createAndSendConfirmationEmail = async (documentId: number) =>
+      await axios
+        .post("/api/email", { reservation, paymentId, documentId, language: i18n.language, action: Action.None })
         .then((res) => res.data)
         .catch((e) => console.log(e));
 
     if (reservation?.paymentStatus === PaymentStatus.Succeeded) {
       if (!reservation?.communication.receiptSent) {
-        createAndSendReceipt();
+        createAndSendReceipt().then((documentId: number) => createAndSendConfirmationEmail(documentId));
       }
       if (!reservation?.communication.reservationEmailSent) {
-        createAndSendConfirmationEmail();
       }
     }
   }, [reservation, paymentId, i18n.language]);

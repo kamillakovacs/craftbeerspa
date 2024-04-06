@@ -69,7 +69,7 @@ const sendDocument = async (
     .then(async () => {
       console.log("Document sent successfully");
       await saveReceiptSentStatus(reservations, paymentId);
-      return res.status(200).json({ success: true });
+      return res.status(200).json({ documentId });
     })
     .catch((e) => console.log("Error emailing document to customer", e.config.data, e.response.data));
 
