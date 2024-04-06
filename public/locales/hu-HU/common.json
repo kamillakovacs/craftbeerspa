@@ -95,7 +95,8 @@
     "thankYou": "Köszönjük a foglalást",
     "yourReservation": "Craft Beer Spa foglalásod Részletei",
     "lookForwardToSeeingYou": "Várunk szeretettel a Craft Beer Spa-ban",
-    "thisReservationWasCanceled": "A foglalásodat töröltük."
+    "thisReservationWasCanceled": "A foglalásodat töröltük.",
+    "contactUsForARefund": "Kérjük küldd el a neved, címed, és bankszámla adataid a craftbeerspa@gmail.com címre, és 7 napon belül visszautaljuk a foglalásod értékét, mínusz egy 1,5% kezelési költséget."
   },
   "reservationDetails": {
     "summaryAndCheckout": "Összegzés",

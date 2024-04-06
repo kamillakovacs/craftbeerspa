@@ -1,4 +1,3 @@
-import { PaymentStatus } from "../../api/interfaces";
 import { CanceledBy } from "../../lib/interfaces";
 
 export default async function handler(req, res) {
@@ -10,8 +9,7 @@ export default async function handler(req, res) {
 
   await reservations.update({
     [`${paymentId}/canceled`]: CanceledBy.User,
-    [`${paymentId}/communication/cancelationEmailSent`]: true,
-    [`${paymentId}/paymentStatus`]: PaymentStatus.CanceledReservation
+    [`${paymentId}/communication/cancelationEmailSent`]: true
   });
 
   return res.status(200).json({ success: true });

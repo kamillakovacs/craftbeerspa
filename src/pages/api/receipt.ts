@@ -11,7 +11,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const headers = { "Content-Type": "application/json", "X-API-KEY": process.env.BILLINGO_API_KEY };
 
   return await getPartners(headers).then((partners: any[]) => {
-    console.log("partners", partners);
     const existingPartner = getExistingPartner(reservation, partners);
     if (existingPartner.length > 0) {
       const partnerId = existingPartner[0].id;
@@ -24,14 +23,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 const createPartnerThenDocument = async (reservation, paymentId, headers, reservations, res) =>
   await axios
-    .post(process.env.BILLINGO_PARTNER_URL, createPartner(reservation), { headers })
-    .then(async () =>
-      getPartners(headers).then(async (partners: any[]) => {
+    .post(process.env.BILLINGO_PARTNER_URL, getCreatePartnerBody(reservation), { headers })
+    .then(async () => {
+      console.log("Partner created successfully");
+      return getPartners(headers).then(async (partners: any[]) => {
         const partnerId = getExistingPartner(reservation, partners)[0].id;
         return await createDocument(reservation, paymentId, partnerId, headers, reservations, res);
-      })
-    )
-    .catch((e) => console.log(e));
+      });
+    })
+    .catch((e) => console.log("Error creating new partner", e));
 
 const getExistingPartner = (reservation: ReservationWithDetails, partners: any[]) =>
   partners.filter(
@@ -51,11 +51,10 @@ const createDocument = async (
   await axios
     .post(process.env.BILLINGO_DOCUMENT_URL, getCreateDocumentBody(reservation, partnerId), { headers })
     .then(async (document: any) => {
-      console.log(document);
-
+      console.log("Document created successfully");
       return sendDocument(document.data.id, reservation.email, headers, reservations, paymentId, res);
     })
-    .catch((e) => console.log(e.config.data, e.response.data));
+    .catch((e) => console.log("Error creating document", e.config.data, e.response.data));
 
 const sendDocument = async (
   documentId: number,
@@ -68,24 +67,22 @@ const sendDocument = async (
   await axios
     .post(`${process.env.BILLINGO_DOCUMENT_URL}/${documentId}/send`, { emails: [email] }, { headers })
     .then(async () => {
-      await reservations.update({
-        [`${paymentId}/communication/receiptSent`]: true
-      });
+      console.log("Document sent successfully");
+      await saveReceiptSentStatus(reservations, paymentId);
       return res.status(200).json({ success: true });
     })
-    .catch((e) => console.log(e.config.data, e.response.data));
+    .catch((e) => console.log("Error emailing document to customer", e.config.data, e.response.data));
 
 const getPartners = async (headers: any) =>
   await axios
     .get(process.env.BILLINGO_PARTNER_URL, { headers })
     .then(async (response: any) => {
-      console.log(response.data.data);
-
+      console.log("Partners pulled successfully");
       return response.data.data;
     })
-    .catch((e) => console.log(e.config.data, e.response.data));
+    .catch((e) => console.log("Error pulling list of partners", e.config.data, e.response.data));
 
-const createPartner = (reservation: ReservationWithDetails) => {
+const getCreatePartnerBody = (reservation: ReservationWithDetails) => {
   const { firstName, lastName, address, city, country, postCode, email, phoneNumber } = reservation;
 
   return {
@@ -101,11 +98,9 @@ const createPartner = (reservation: ReservationWithDetails) => {
     custom_billing_settings: {
       payment_method: "online_bankcard",
       document_form: "electronic",
-      due_days: 0,
       document_currency: "HUF",
       template_language_code: "hu"
-    },
-    group_member_tax_number: ""
+    }
   };
 };
 
@@ -170,3 +165,11 @@ const getProductId = (guests: { label: string; value: number }, tubs: { label: s
       return process.env.BILLINGO_1_1_PRODUCT_ID;
   }
 };
+
+const saveReceiptSentStatus = async (reservations: any, paymentId: string) =>
+  await reservations
+    .update({
+      [`${paymentId}/communication/receiptSent`]: true
+    })
+    .then(() => console.log("Receipt sent status saved"))
+    .catch((e) => console.log("Error saving receipt sent status", e));

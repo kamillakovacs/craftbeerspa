@@ -2,6 +2,10 @@ import axios from "axios";
 import { PaymentStatus } from "./interfaces";
 import { ReservationWithDetails } from "../lib/validation/validationInterfaces";
 
+const headers = {
+  "Content-Type": "application/json; charset=utf-8"
+};
+
 export const makeReservation = async (
   reservationData: ReservationWithDetails,
   customerAlreadyInDatabase: boolean,
@@ -15,10 +19,6 @@ export const makeReservation = async (
     email: reservationData.email
   };
 
-  const headers = {
-    "Content-Type": "application/json; charset=utf-8"
-  };
-
   reservationData.paymentStatus = PaymentStatus.Prepared;
   reservationData.transactionId = transactionId;
 
@@ -28,25 +28,8 @@ export const makeReservation = async (
     .catch((e) => e);
 };
 
-export const updateReservationDate = async (date: Date, paymentId: string) => {
-  const headers = {
-    "Content-Type": "application/json; charset=utf-8"
-  };
-
-  return await axios
+export const updateReservationDate = async (date: Date, paymentId: string) =>
+  await axios
     .post("/api/updateReservationDate", { date, paymentId }, { headers })
     .then((res) => res.data)
     .catch((e) => e);
-};
-
-export const markReservationCanceled = async (paymentId: string) => {
-  const headers = {
-    "Content-Type": "application/json; charset=utf-8"
-  };
-
-  return await axios
-    .post("/api/cancelReservation", { paymentId }, { headers })
-    .then((res) => res.data)
-    .catch((e) => e);
-};
-

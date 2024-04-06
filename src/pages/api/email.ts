@@ -5,7 +5,6 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { Action } from "../../lib/interfaces";
 import { currencyFormat } from "../../lib/util/currencyFormat";
 import { ReservationWithDetails } from "../../lib/validation/validationInterfaces";
-import { PaymentStatus } from "../../api/interfaces";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { reservation, paymentId, language, action, date } = req.body;
@@ -87,7 +86,7 @@ const getVariables = (
   amendedDate?: Date,
   adminEmail?: string
 ) => {
-  const { firstName, lastName, email, numberOfTubs, numberOfGuests, price, paymentStatus } = reservation;
+  const { firstName, lastName, email, numberOfTubs, numberOfGuests, price } = reservation;
 
   const date = getDate(language, amendedDate, reservation?.date);
 
@@ -152,7 +151,7 @@ const getVariables = (
         },
         {
           var: "paymentStatus",
-          value: getPaymentStatus(language, paymentStatus)
+          value: language === "hu-HU" ? "Rendezve" : "Paid"
         },
         {
           var: "paymentId",
@@ -183,8 +182,8 @@ const getMessage = (language: string, action: Action) => {
       return language === "hu-HU" ? "Foglalásod időpontját frissítettük." : "Your reservation date has been updated.";
     case Action.Cancel:
       return language === "hu-HU"
-        ? "Foglalásodat töröltük, és kártyádra visszautaltuk a foglalás összegét, mínusz egy 0,5% kezelési díjat."
-        : "Your reservation was canceled, and the reservation cost, minus a 1.5% handling fee, was refunded to your card.";
+        ? "Foglalásodat töröltük. Kérjük írd meg nekünk a neved, címed, és bankszámla adataid a craftbeerspa@gmail.com címre, és 7 napon belül visszautaljuk a foglalásod értékét, mínusz egy 1,5% kezelési költséget."
+        : "Your reservation was canceled. Please provide us your name, address, and bank account details, and we will refund your payment, minus a 1.5% cancelation fee, within 7 days.";
   }
 };
 
@@ -199,12 +198,3 @@ const getInfo = (action: Action) => {
       return "Egy foglalást töröltek. Visszautaltuk a kártyára a foglalás összegét, mínusz egy 0,5% kezelési díjat.";
   }
 };
-
-const getPaymentStatus = (language: string, paymentStatus: PaymentStatus) =>
-  paymentStatus === PaymentStatus.CanceledReservation
-    ? language === "hu-HU"
-      ? "Visszatérítve"
-      : "Refunded"
-    : language === "hu-HU"
-    ? "Rendezve"
-    : "Paid";

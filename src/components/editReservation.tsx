@@ -5,7 +5,6 @@ import { Formik } from "formik";
 import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
 
-import * as cancelPayment from "../api/paymentCancelation";
 import * as changeReservation from "../api/makeReservation";
 
 import { Reservation, ReservationWithDetails } from "../lib/validation/validationInterfaces";
@@ -18,7 +17,6 @@ import modalStyles from "../styles/modal.module.scss";
 
 import Modal from "./modal";
 import { PaymentStatus } from "../api/interfaces";
-
 
 interface Props {
   reservation: ReservationWithDetails;
@@ -36,53 +34,62 @@ const EditReservation: FC<Props> = ({ reservation, currentReservations }) => {
   const notCanceled = !reservation.canceled && reservation.paymentStatus === PaymentStatus.Succeeded;
 
   //@ts-ignore
-  const reservationIsMoreThan48HoursAway: boolean = Math.round((new Date(reservation.date).getTime() - new Date().getTime()) / (1000 * 3600 * 24)) > 2;
-  const reservationIsInTheFuture: boolean = new Date(reservation.date).valueOf() > new Date().setHours(new Date().getHours() + 2)
+  const reservationIsMoreThan48HoursAway: boolean =
+    Math.round((new Date(reservation.date).getTime() - new Date().getTime()) / (1000 * 3600 * 24)) > 2;
+  const reservationIsInTheFuture: boolean =
+    new Date(reservation.date).valueOf() > new Date().setHours(new Date().getHours() + 2);
 
   useEffect(() => {
     if (document && document.querySelector("#changeButton") && action == Action.Change) {
       document.querySelector("#changeButton").scrollIntoView({ behavior: "smooth", inline: "start" });
     }
-  })
+  });
 
   useEffect(() => {
     if (updateResponse === 200) {
-      window.location.reload()
+      window.location.reload();
     }
-  })
+  });
 
   useEffect(() => {
-    const markUncancelable = async () => await axios
-      .post("/api/markUncancelable", { paymentId })
-      .then((res) => res.data)
-      .catch((e) => {
-        console.log("Error sending email confirming change")
-        return e;
-      });
+    const markUncancelable = async () =>
+      await axios
+        .post("/api/markUncancelable", { paymentId })
+        .then((res) => res.data)
+        .catch((e) => {
+          console.log("Error sending email confirming change");
+          return e;
+        });
     if (!reservationIsMoreThan48HoursAway) {
       markUncancelable();
     }
-  }, [reservationIsMoreThan48HoursAway, paymentId])
+  }, [reservationIsMoreThan48HoursAway, paymentId]);
 
   const showChange = async () => {
     setAction(Action.Change);
   };
 
-  const openModal = () => setShowModal(true)
+  const openModal = () => setShowModal(true);
 
   const cancel = async () => {
     setAction(Action.Cancel);
     setDate(date);
-    await cancelPayment.useCancelPaymentRequest(paymentId, reservation, reservation.price, i18n.language)
-      .then(() => {
+    const headers = {
+      "Content-Type": "application/json; charset=utf-8"
+    };
+
+    return await axios
+      .post("/api/cancelReservation", { paymentId }, { headers })
+      .then((res) => {
         setShowModal(false);
-        window.location.reload()
+        window.location.reload();
       })
+      .catch((e) => e);
   };
 
   const redirectToChangeReservation = async (date: Date) => {
     await changeReservation.updateReservationDate(date, paymentId).catch((e) => e);
-  }
+  };
 
   const initialValues = {
     date: null,
@@ -103,56 +110,56 @@ const EditReservation: FC<Props> = ({ reservation, currentReservations }) => {
       .post("/api/email", { reservation, paymentId, language: i18n.language, t, action: Action.Change, date })
       .then((res) => res.data)
       .catch((e) => {
-        console.log("Error sending email confirming change")
+        console.log("Error sending email confirming change");
         return e;
       });
 
     return redirectToChangeReservation(values.date)
       .then(() => setUpdateResponse(200))
-      .catch(() => setUpdateResponse(500))
+      .catch(() => setUpdateResponse(500));
   };
 
   return (
     <div className={reservationStyles.reservation__infoContainer}>
       <div className={reservationStyles.reservation__info}>
-        {
-          notCanceled && reservationIsInTheFuture && (
+        {notCanceled && reservationIsInTheFuture && (
+          <button
+            className={`${reservationStyles.reservation__button} ${reservationStyles.reservation__largemargin}`}
+            id="changeButton"
+            type="button"
+            onClick={showChange}
+          >
+            {t("reservationDate.changeReservationDate")}
+          </button>
+        )}
+        {notCanceled && reservationIsMoreThan48HoursAway && !reservation.uncancelable && (
+          <>
             <button
-              className={`${reservationStyles.reservation__button} ${reservationStyles.reservation__largemargin}`}
-              id="changeButton"
               type="button"
-              onClick={showChange}
+              className={`${reservationStyles.reservation__button} ${reservationStyles.reservation__margin}`}
+              onClick={openModal}
             >
-              {t("reservationDate.changeReservationDate")}
+              {t("reservationDate.cancelReservation")}
             </button>
-          )
-        }
-        {
-          notCanceled && reservationIsMoreThan48HoursAway && !reservation.uncancelable && (
-            <>
-              <button
-                type="button"
-                className={`${reservationStyles.reservation__button} ${reservationStyles.reservation__margin}`}
-                onClick={openModal}
-              >
-                {t("reservationDate.cancelReservation")}
-              </button>
-              {showModal &&
-                <Modal onClose={() => setShowModal(false)} title="Cancelation">
-                  <span>Are you sure you want to cancel your reservation?</span>
-                  <button
-                    type="submit"
-                    className={`${modalStyles.button} ${reservationStyles.reservation__margin}`}
-                    onClick={cancel}
-                  >
-                    Yes, cancel it
-                  </button>
-                </Modal>
-              }
-            </>
-          )
-        }
-
+            {showModal && (
+              <Modal onClose={() => setShowModal(false)} title="Cancelation">
+                <span>Are you sure you want to cancel your reservation?</span>
+                <span>
+                  If so, please email us at craftbeerspa@gmail.com with your name, address, and bank account details,
+                  and we will refund your bank account within 7 days for the cost of your reservation minus a 1.5%
+                  transaction fee.
+                </span>
+                <button
+                  type="submit"
+                  className={`${modalStyles.button} ${reservationStyles.reservation__margin}`}
+                  onClick={cancel}
+                >
+                  Yes, cancel it
+                </button>
+              </Modal>
+            )}
+          </>
+        )}
       </div>
       <Formik<Reservation>
         initialValues={initialValues}
@@ -181,10 +188,14 @@ const EditReservation: FC<Props> = ({ reservation, currentReservations }) => {
                           {t("reservationDate.finalizeDateChange")}
                         </button>
                         {updateResponse === 200 && (
-                          <div className={reservationStyles.reservation__updated__text}>{t("reservationDate.updated")}</div>
+                          <div className={reservationStyles.reservation__updated__text}>
+                            {t("reservationDate.updated")}
+                          </div>
                         )}
                         {updateResponse === 500 && (
-                          <div className={reservationStyles.reservation__updated__text}>{t("reservationDate.updateError")}</div>
+                          <div className={reservationStyles.reservation__updated__text}>
+                            {t("reservationDate.updateError")}
+                          </div>
                         )}
                       </div>
                     </div>

@@ -49,10 +49,9 @@ const Reservation: FC<Props> = ({ reservation, paymentId, customerAlreadyInDatab
     <>
       <div id="modal-root"></div>
       <article className={thanksStyles.container}>
-        {reservation?.paymentStatus === PaymentStatus.Succeeded && (
+        {reservation?.paymentStatus === PaymentStatus.Succeeded ? (
           <ReservationDetails reservation={reservation} currentReservations={currentReservations} />
-        )}
-        {reservation?.paymentStatus !== PaymentStatus.Succeeded && (
+        ) : (
           <Unsuccessful reservation={reservation} customerAlreadyInDatabase={customerAlreadyInDatabase} />
         )}
       </article>

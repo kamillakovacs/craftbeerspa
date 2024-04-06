@@ -48,9 +48,14 @@ const ReservationDetails: FC<Props> = ({ reservation, currentReservations }) => 
     <article className={thanksStyles.container}>
       <label className={thanksStyles.reservation__title}>
         <span>
-          {reservation?.canceled && reservation?.canceled !== CanceledBy.BeerSpa
-            ? t("thanks.thisReservationWasCanceled")
-            : t("thanks.thankYou")}
+          {reservation?.canceled ? (
+            <div className={thanksStyles.reservation__canceled}>
+              <span>{t("thanks.thisReservationWasCanceled")}</span>
+              <span>{t("thanks.contactUsForARefund")}</span>
+            </div>
+          ) : (
+            t("thanks.thankYou")
+          )}
         </span>
       </label>
       <div className={thanksStyles.reservation}>

@@ -100,7 +100,8 @@
     "thankYou": "Thank you for your reservation",
     "yourReservation": "Your Reservation at Craft Beer Spa",
     "lookForwardToSeeingYou": "We look forward to seeing you at Craft Beer Spa",
-    "thisReservationWasCanceled": "Your reservation was canceled."
+    "thisReservationWasCanceled": "Your reservation was canceled.",
+    "contactUsForARefund": "Please provide us your name, address, and bank account details, and we will refund your payment, minus a 1.5% cancelation fee, within 7 days."
   },
   "reservationDetails": {
     "summaryAndCheckout": "Summary & Checkout",
