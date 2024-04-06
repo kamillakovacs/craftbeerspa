@@ -23,35 +23,34 @@ const Reservation: FC<Props> = ({ reservation, paymentId, customerAlreadyInDatab
   const { i18n } = useTranslation("common");
 
   useEffect(() => {
-    const createAndSendConfirmationEmail = async () => await axios
-      .post("/api/email", { reservation, paymentId, language: i18n.language, action: Action.None })
-      .then((res) => res.data)
-      .catch((e) => console.log(e));
+    const createAndSendConfirmationEmail = async () =>
+      await axios
+        .post("/api/email", { reservation, paymentId, language: i18n.language, action: Action.None })
+        .then((res) => res.data)
+        .catch((e) => console.log(e));
 
-    const createAndSendReceipt = async () => await axios
-      .post("/api/receipt", { reservation, paymentId })
-      .then((res) => res.data)
-      .catch((e) => console.log(e));
+    const createAndSendReceipt = async () =>
+      await axios
+        .post("/api/receipt", { reservation, paymentId })
+        .then((res) => res.data)
+        .catch((e) => console.log(e));
 
     if (reservation?.paymentStatus === PaymentStatus.Succeeded) {
       if (!reservation?.communication.receiptSent) {
         createAndSendReceipt();
       }
       if (!reservation?.communication.reservationEmailSent) {
-        createAndSendConfirmationEmail()
+        createAndSendConfirmationEmail();
       }
     }
-  }, [reservation, paymentId, i18n.language])
+  }, [reservation, paymentId, i18n.language]);
 
   return (
     <>
       <div id="modal-root"></div>
       <article className={thanksStyles.container}>
         {reservation?.paymentStatus === PaymentStatus.Succeeded && (
-          <ReservationDetails
-            reservation={reservation}
-            currentReservations={currentReservations}
-          />
+          <ReservationDetails reservation={reservation} currentReservations={currentReservations} />
         )}
         {reservation?.paymentStatus !== PaymentStatus.Succeeded && (
           <Unsuccessful reservation={reservation} customerAlreadyInDatabase={customerAlreadyInDatabase} />
@@ -68,29 +67,31 @@ export async function getServerSideProps({ query, locale }) {
   const reservations = await res.once("value").then(function (snapshot) {
     return snapshot.val() || "Anonymous";
   });
-  const paymentId = query.paymentId as string
+  const paymentId = query.paymentId as string;
   const reservation: ReservationWithDetails = reservations[paymentId];
 
   const users: User[] = await customers.once("value").then(function (snapshot) {
     return snapshot.val() || "Anonymous";
   });
 
-  const customerAlreadyInDatabase = Object.values(users).filter(
-    (user) => {
+  const customerAlreadyInDatabase =
+    Object.values(users).filter((user) => {
       if (user.firstName) {
-        return user.firstName.toLowerCase() === reservation.firstName.toLowerCase() &&
+        return (
+          user.firstName.toLowerCase() === reservation.firstName.toLowerCase() &&
           user.lastName.toLowerCase() === reservation.lastName.toLowerCase() &&
           user.phoneNumber.toLowerCase() === reservation.phoneNumber.toLowerCase() &&
           user.email.toLowerCase() === reservation.email.toLowerCase()
+        );
       }
-    }
-  ).length > 0;
+    }).length > 0;
 
   const currentReservations: ReservationDataShort[] = await res?.once("value").then(function (snapshot) {
     return (
       Object.values(snapshot.val())
-        .filter((res: ReservationWithDetails) =>
-          res.paymentStatus === PaymentStatus.Succeeded && new Date(res.date) > new Date()
+        .filter(
+          (res: ReservationWithDetails) =>
+            res.paymentStatus === PaymentStatus.Succeeded && new Date(res.date) > new Date()
         )
         .map((res: ReservationShort) => ({
           date: res.date ?? null,
@@ -100,7 +101,15 @@ export async function getServerSideProps({ query, locale }) {
     );
   });
 
-  return { props: { ...(await serverSideTranslations(locale, ["common"])), reservation, paymentId, customerAlreadyInDatabase, currentReservations } };
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ["common"])),
+      reservation,
+      paymentId,
+      customerAlreadyInDatabase,
+      currentReservations
+    }
+  };
 }
 
 export default memo(Reservation);

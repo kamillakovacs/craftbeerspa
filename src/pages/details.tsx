@@ -49,7 +49,7 @@ const Details: FC<Props> = ({ customerAlreadyInDatabase }) => {
     email: null,
     address: null,
     city: null,
-    countryCode: null,
+    country: null,
     postCode: null,
     paymentMethod: null,
     whereYouHeard: { value: "", label: "" },
@@ -84,7 +84,7 @@ const Details: FC<Props> = ({ customerAlreadyInDatabase }) => {
       email: values.email,
       address: values.address,
       city: values.city,
-      countryCode: values.countryCode,
+      country: values.country,
       postCode: values.postCode,
       whereYouHeard: values.whereYouHeard,
       paymentStatus: null,
@@ -120,6 +120,7 @@ const Details: FC<Props> = ({ customerAlreadyInDatabase }) => {
           validateOnChange
         >
           {({ dirty, errors, values, handleSubmit }) => {
+            console.log(values);
             return (
               <form onSubmit={handleSubmit}>
                 <Customer />

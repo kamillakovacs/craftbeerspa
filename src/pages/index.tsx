@@ -60,7 +60,7 @@ const Main: FC<Props> = ({ currentReservations }) => {
       email: null,
       address: null,
       city: null,
-      countryCode: null,
+      country: null,
       postCode: null,
       whereYouHeard: { value: "", label: "" },
       paymentStatus: null,

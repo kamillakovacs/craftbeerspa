@@ -1,8 +1,9 @@
-import React, { ChangeEvent, FC, memo } from "react";
+import React, { ChangeEvent, FC, memo, useMemo, useState } from "react";
 import Select, { ActionMeta } from "react-select";
 import classNames from "classnames";
 import { useFormikContext } from "formik";
 import { useTranslation } from "next-i18next";
+import countryList from "react-select-country-list";
 
 import { ReservationWithDetails } from "../lib/validation/validationInterfaces";
 
@@ -11,8 +12,11 @@ import styles from "../styles/main.module.scss";
 
 const Customer: FC = () => {
   const { t } = useTranslation("common");
+  const options = useMemo(() => countryList().getData(), []);
   const { values, errors, touched, handleChange, setFieldValue, setFieldTouched } =
     useFormikContext<ReservationWithDetails>();
+  console.log("1", countryList());
+  console.log("2", countryList().native().nativeData.values());
 
   const onChangeInput = (e: ChangeEvent<HTMLInputElement>) => {
     setFieldTouched(e.target.name);
@@ -24,6 +28,10 @@ const Customer: FC = () => {
     select: ActionMeta<{ value: string; label: string }>
   ) => {
     handleChange({ target: { name: select.name, value: option } });
+  };
+
+  const onChangeCountryInput = (option: { value: string; label: string }) => {
+    setFieldValue("country", option);
   };
 
   const whereYouHeardOptions = [
@@ -66,6 +74,7 @@ const Customer: FC = () => {
           onChange={onChangeInput}
         />
       </div>
+
       <div className={customerStyles.detailTitle}>
         <div
           className={classNames(`${styles.todoitem} ${styles.todoitem__two}`, {
@@ -74,6 +83,101 @@ const Customer: FC = () => {
         />
         <label>{t("customer.contactInformation")}</label>
       </div>
+      <input
+        className={classNames(customerStyles.customer__input, {
+          [customerStyles.customer__input__error]: errors.address && touched.address
+        })}
+        name="address"
+        placeholder={t("customer.address")}
+        type="text"
+        onChange={onChangeInput}
+      />
+      <input
+        className={classNames(customerStyles.customer__input, {
+          [customerStyles.customer__input__error]: errors.city && touched.city
+        })}
+        name="city"
+        placeholder={t("customer.city")}
+        type="text"
+        onChange={onChangeInput}
+      />
+      <input
+        className={classNames(customerStyles.customer__input, {
+          [customerStyles.customer__input__error]: errors.postCode && touched.postCode
+        })}
+        name="postCode"
+        placeholder={t("customer.postCode")}
+        type="text"
+        onChange={onChangeInput}
+      />
+      <Select
+        options={options}
+        value={values.country}
+        onChange={onChangeCountryInput}
+        placeholder={t("customer.country")}
+        styles={{
+          container: (baseStyles) => ({
+            ...baseStyles
+          }),
+          control: (baseStyles) => ({
+            ...baseStyles,
+            height: "64px",
+            backgroundColor: "#343434",
+            borderWidth: "1px",
+            borderColor: touched.whereYouHeard && errors.whereYouHeard ? "red" : "#707070",
+            cursor: "pointer !important",
+            margin: "20px 0 0 25px",
+            width: "650px",
+            fontSize: "22px",
+            fontWeight: "200",
+            ":focus": { borderColor: "#707070" },
+            ":hover": {
+              borderColor: touched.whereYouHeard && errors.whereYouHeard ? "red" : "#707070",
+              boxShadow: "0 0 0 0"
+            },
+            "@media only screen and (max-width: 500px)": {
+              width: "450px"
+            }
+          }),
+          singleValue: (baseStyles) => ({
+            ...baseStyles,
+            color: "white",
+            marginLeft: "10px"
+          }),
+          menu: (baseStyles) => ({
+            ...baseStyles,
+            backgroundColor: "#343434",
+            border: "1px solid #707070",
+            borderRadius: "5px",
+            marginLeft: "25px",
+            fontSize: "22px",
+            color: "white",
+            paddingLeft: "10px",
+            width: "650px",
+            "@media only screen and (max-width: 500px)": {
+              width: "450px"
+            }
+          }),
+          menuList: (baseStyles) => ({
+            ...baseStyles,
+            maxHeight: "300px"
+          }),
+          option: (baseStyles) => ({
+            ...baseStyles,
+            backgroundColor: "#343434",
+            borderRadius: "5px",
+            display: "flex",
+            alignItems: "center",
+            fontWeight: "200",
+            cursor: "pointer",
+            paddingLeft: "10px"
+          }),
+          placeholder: (baseStyles) => ({
+            ...baseStyles,
+            marginLeft: "12px"
+          })
+        }}
+      />
       <div className={customerStyles.detail}>
         <input
           className={classNames(customerStyles.customer__input, {

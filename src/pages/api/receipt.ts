@@ -1,80 +1,124 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import axios from "axios";
+import { format } from "date-fns";
 import { ReservationWithDetails } from "../../lib/validation/validationInterfaces";
-import firebase from "firebase-admin";
+import firebase from "../../lib/firebase";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const reservation: ReservationWithDetails = req.body.reservation;
-  const paymentId = req.body.paymendId;
-  const database = firebase.database();
-  const reservations = database.ref("reservations");
+  const paymentId = req.body.paymentId;
+  const reservations = firebase.database().ref("reservations");
   const headers = { "Content-Type": "application/json", "X-API-KEY": process.env.BILLINGO_API_KEY };
 
-  await axios
-    .post(process.env.BILLINGO_CREATE_PARTNER_URL, createPartner(reservation, paymentId), { headers })
-    .then(async () =>
-      axios
-        .post(process.env.BILLINGO_CREATE_DOCUMENT_URL, createDocument(reservation, paymentId), { headers })
-        .then(async (res: any) => {
-          await reservations.update({
-            [`${paymentId}/communication/receiptSent`]: false
-          });
-          return res.data;
-        })
-        .catch(() => {})
-    )
-    .catch((e) => e);
-
-  return res.status(200).json({ success: true });
+  return await getPartners(headers).then((partners: any[]) => {
+    console.log("partners", partners);
+    const existingPartner = getExistingPartner(reservation, partners);
+    if (existingPartner.length > 0) {
+      const partnerId = existingPartner[0].id;
+      createDocument(reservation, paymentId, partnerId, headers, reservations, res);
+    } else {
+      createPartnerThenDocument(reservation, paymentId, headers, reservations, res);
+    }
+  });
 }
 
-const createPartner = (reservation: ReservationWithDetails, paymentId: string) => {
-  const { firstName, lastName, address, city, countryCode, postCode, email, phoneNumber } = reservation;
+const createPartnerThenDocument = async (reservation, paymentId, headers, reservations, res) =>
+  await axios
+    .post(process.env.BILLINGO_PARTNER_URL, createPartner(reservation), { headers })
+    .then(async () =>
+      getPartners(headers).then(async (partners: any[]) => {
+        const partnerId = getExistingPartner(reservation, partners)[0].id;
+        return await createDocument(reservation, paymentId, partnerId, headers, reservations, res);
+      })
+    )
+    .catch((e) => console.log(e));
+
+const getExistingPartner = (reservation: ReservationWithDetails, partners: any[]) =>
+  partners.filter(
+    (partner) =>
+      partner.address.address === reservation.address &&
+      partner.name === reservation.firstName + " " + reservation.lastName
+  );
+
+const createDocument = async (
+  reservation: ReservationWithDetails,
+  paymentId: string,
+  partnerId: number,
+  headers: any,
+  reservations: any,
+  res: NextApiResponse
+) =>
+  await axios
+    .post(process.env.BILLINGO_DOCUMENT_URL, getCreateDocumentBody(reservation, partnerId), { headers })
+    .then(async (document: any) => {
+      console.log(document);
+
+      return sendDocument(document.data.id, reservation.email, headers, reservations, paymentId, res);
+    })
+    .catch((e) => console.log(e.config.data, e.response.data));
+
+const sendDocument = async (
+  documentId: number,
+  email: string,
+  headers: any,
+  reservations: any,
+  paymentId: string,
+  res: NextApiResponse
+) =>
+  await axios
+    .post(`${process.env.BILLINGO_DOCUMENT_URL}/${documentId}/send`, { emails: [email] }, { headers })
+    .then(async () => {
+      await reservations.update({
+        [`${paymentId}/communication/receiptSent`]: true
+      });
+      return res.status(200).json({ success: true });
+    })
+    .catch((e) => console.log(e.config.data, e.response.data));
+
+const getPartners = async (headers: any) =>
+  await axios
+    .get(process.env.BILLINGO_PARTNER_URL, { headers })
+    .then(async (response: any) => {
+      console.log(response.data.data);
+
+      return response.data.data;
+    })
+    .catch((e) => console.log(e.config.data, e.response.data));
+
+const createPartner = (reservation: ReservationWithDetails) => {
+  const { firstName, lastName, address, city, country, postCode, email, phoneNumber } = reservation;
 
   return {
-    id: paymentId,
-    name: firstName + " " + lastName,
+    name: `${firstName} ${lastName}`,
     address: {
-      country_code: countryCode,
+      country_code: country.value,
       post_code: postCode,
       city,
       address
     },
     emails: [email],
-    taxcode: "",
-    iban: "",
-    swift: "",
-    account_number: "",
     phone: phoneNumber,
-    general_ledger_number: "",
-    tax_type: "NO_TAX_NUMBER",
     custom_billing_settings: {
       payment_method: "online_bankcard",
       document_form: "electronic",
       due_days: 0,
       document_currency: "HUF",
-      template_language_code: "hu",
-      discount: {
-        type: "percent",
-        value: 0
-      }
+      template_language_code: "hu"
     },
     group_member_tax_number: ""
   };
 };
 
-const createDocument = (reservation: ReservationWithDetails, paymentId: string) => ({
-  vendor_id: "",
-  partner_id: paymentId,
+const getCreateDocumentBody = (reservation: ReservationWithDetails, partnerId: number) => ({
+  partner_id: partnerId,
   block_id: process.env.BILLINGO_DOCUMENT_BLOCK_ID,
   bank_account_id: process.env.BILLING_BANK_ACCOUNT_ID,
   type: "invoice",
-  fulfillment_date: reservation.dateOfPurchase,
-  due_date: reservation.dateOfPurchase,
+  fulfillment_date: getDateOfPurchaseForBillingo(new Date(reservation.dateOfPurchase)),
+  due_date: getDateOfPurchaseForBillingo(new Date(reservation.dateOfPurchase)),
   payment_method: "bankcard",
   language: "hu",
   currency: "HUF",
-  conversion_rate: 1,
   electronic: true,
   paid: true,
   items: [
@@ -82,25 +126,10 @@ const createDocument = (reservation: ReservationWithDetails, paymentId: string) 
       product_id: getProductId(reservation.numberOfGuests, reservation.numberOfTubs),
       quantity: 1
     }
-  ],
-  settings: {
-    mediated_service: false,
-    without_financial_fulfillment: false,
-    online_payment: "Barion",
-    round: "five",
-    no_send_onlineszamla_by_user: true,
-    order_number: "",
-    place_id: 0,
-    instant_payment: true,
-    selected_type: "invoice"
-  },
-  advance_invoice: [0],
-  discount: {
-    type: "percent",
-    value: 0
-  },
-  instant_payment: true
+  ]
 });
+
+const getDateOfPurchaseForBillingo = (dateOfPurchase: Date) => format(dateOfPurchase, "yyyy-MM-dd");
 
 const getProductId = (guests: { label: string; value: number }, tubs: { label: string; value: number }) => {
   switch (guests.value) {

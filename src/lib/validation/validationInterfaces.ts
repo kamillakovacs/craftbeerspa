@@ -20,7 +20,7 @@ export interface ReservationWithDetails {
   email: string;
   address: string;
   city: string;
-  countryCode: string;
+  country: { label: string; value: string };
   postCode: string;
   whereYouHeard: { label: string; value: string };
   requirements: string;
