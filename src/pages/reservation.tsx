@@ -35,12 +35,8 @@ const Reservation: FC<Props> = ({ reservation, paymentId, customerAlreadyInDatab
         .then((res) => res.data)
         .catch((e) => console.log(e));
 
-    if (reservation?.paymentStatus === PaymentStatus.Succeeded) {
-      if (!reservation?.communication.receiptSent) {
-        createAndSendReceipt().then((documentId: number) => createAndSendConfirmationEmail(documentId));
-      }
-      if (!reservation?.communication.reservationEmailSent) {
-      }
+    if (reservation?.paymentStatus === PaymentStatus.Succeeded && !reservation?.communication.receiptSent) {
+      createAndSendReceipt().then((documentId: number) => createAndSendConfirmationEmail(documentId));
     }
   }, [reservation, paymentId, i18n.language]);
 
