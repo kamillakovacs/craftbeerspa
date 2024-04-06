@@ -18,6 +18,10 @@ export interface ReservationWithDetails {
   lastName: string;
   phoneNumber: string;
   email: string;
+  address: string;
+  city: string;
+  countryCode: string;
+  postCode: string;
   whereYouHeard: { label: string; value: string };
   requirements: string;
   termsAndConditions: boolean;
