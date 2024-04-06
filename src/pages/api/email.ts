@@ -37,7 +37,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     .setSubject(getSubject(true, action))
     .setTemplateId(process.env.MAILERSEND_ADMIN_TEMPLATE_ID)
     .setPersonalization(getPersonalization(process.env.ADMIN_EMAIL, action))
-    .setVariables(getVariables(reservation, language, paymentId, action, date, process.env.ADMIN_EMAIL));
+    .setVariables(getVariables(reservation, language, paymentId, documentId, action, date, process.env.ADMIN_EMAIL));
 
   await mailerSend.email
     .send(emailParamsToCustomer)
@@ -84,7 +84,7 @@ const getVariables = (
   paymentId: string,
   documentId: number,
   action: Action,
-  amendedDate?: Date,
+  amendedDate: Date,
   adminEmail?: string
 ) => {
   const { firstName, lastName, email, phoneNumber, numberOfTubs, numberOfGuests, price } = reservation;
@@ -160,7 +160,7 @@ const getVariables = (
         },
         {
           var: "documentId",
-          value: documentId
+          value: documentId.toString()
         }
       ]
     }
