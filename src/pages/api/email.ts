@@ -160,7 +160,7 @@ const getVariables = (
         },
         {
           var: "documentId",
-          value: documentId.toString()
+          value: documentId?.toString()
         }
       ]
     }

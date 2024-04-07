@@ -145,9 +145,9 @@ const EditReservation: FC<Props> = ({ reservation, currentReservations }) => {
               <Modal onClose={() => setShowModal(false)} title="Cancelation">
                 <span>Are you sure you want to cancel your reservation?</span>
                 <span>
-                  If so, please email us at craftbeerspa@gmail.com with your name, address, and bank account details,
-                  and we will refund your bank account within 7 days for the cost of your reservation minus a 1.5%
-                  transaction fee.
+                  If so, press the button below, then email us at craftbeerspa@gmail.com with your name, address, and
+                  bank account details, and we will refund your bank account within 7 days for the cost of your
+                  reservation minus a 1.5% transaction fee.
                 </span>
                 <button
                   type="submit"
@@ -187,11 +187,6 @@ const EditReservation: FC<Props> = ({ reservation, currentReservations }) => {
                         >
                           {t("reservationDate.finalizeDateChange")}
                         </button>
-                        {updateResponse === 200 && (
-                          <div className={reservationStyles.reservation__updated__text}>
-                            {t("reservationDate.updated")}
-                          </div>
-                        )}
                         {updateResponse === 500 && (
                           <div className={reservationStyles.reservation__updated__text}>
                             {t("reservationDate.updateError")}
