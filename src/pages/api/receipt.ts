@@ -68,7 +68,7 @@ const sendDocument = async (
     .post(`${process.env.BILLINGO_DOCUMENT_URL}/${documentId}/send`, { emails: [email] }, { headers })
     .then(async () => {
       console.log("Document sent successfully");
-      await saveReceiptSentStatus(reservations, paymentId);
+      await saveReceiptSentStatusAndDocumentId(reservations, paymentId, documentId);
       return res.status(200).json({ documentId });
     })
     .catch((e) => console.log("Error emailing document to customer", e.config.data, e.response.data));
@@ -166,10 +166,11 @@ const getProductId = (guests: { label: string; value: number }, tubs: { label: s
   }
 };
 
-const saveReceiptSentStatus = async (reservations: any, paymentId: string) =>
+const saveReceiptSentStatusAndDocumentId = async (reservations: any, paymentId: string, documentId: number) =>
   await reservations
     .update({
-      [`${paymentId}/communication/receiptSent`]: true
+      [`${paymentId}/communication/receiptSent`]: true,
+      [`${paymentId}/reservationId`]: documentId
     })
     .then(() => console.log("Receipt sent status saved"))
     .catch((e) => console.log("Error saving receipt sent status", e));

@@ -31,6 +31,7 @@ export interface ReservationWithDetails {
   canceled: CanceledBy;
   uncancelable: boolean;
   communication: Communication;
+  reservationId?: number;
   transactionId?: string;
 }
 

@@ -29,14 +29,14 @@ const Reservation: FC<Props> = ({ reservation, paymentId, customerAlreadyInDatab
         .then((res) => res.data.documentId)
         .catch((e) => console.log(e));
 
-    const createAndSendConfirmationEmail = async (documentId: number) =>
+    const createAndSendConfirmationEmail = async (reservationId: number) =>
       await axios
-        .post("/api/email", { reservation, paymentId, documentId, language: i18n.language, action: Action.None })
+        .post("/api/email", { reservation, paymentId, reservationId, language: i18n.language, action: Action.None })
         .then((res) => res.data)
         .catch((e) => console.log(e));
 
     if (reservation?.paymentStatus === PaymentStatus.Succeeded && !reservation?.communication.receiptSent) {
-      createAndSendReceipt().then((documentId: number) => createAndSendConfirmationEmail(documentId));
+      createAndSendReceipt().then((reservationId: number) => createAndSendConfirmationEmail(reservationId));
     }
   }, [reservation, paymentId, i18n.language]);
 

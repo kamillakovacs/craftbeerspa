@@ -100,14 +100,22 @@ const EditReservation: FC<Props> = ({ reservation, currentReservations }) => {
     lastName: reservation.lastName,
     phoneNumber: reservation.phoneNumber,
     email: reservation.email,
-    paymentMethod: reservation.paymentMethod
+    paymentMethod: reservation.paymentMethod,
+    reservationId: reservation.reservationId
   };
 
   const onSubmit = async (values: Reservation) => {
     setDate(values.date);
 
     await axios
-      .post("/api/email", { reservation, paymentId, language: i18n.language, t, action: Action.Change, date })
+      .post("/api/email", {
+        reservation,
+        paymentId,
+        reservationId: reservation.reservationId,
+        language: i18n.language,
+        action: Action.Change,
+        date
+      })
       .then((res) => res.data)
       .catch((e) => {
         console.log("Error sending email confirming change");

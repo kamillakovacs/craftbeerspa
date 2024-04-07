@@ -7,7 +7,7 @@ import { currencyFormat } from "../../lib/util/currencyFormat";
 import { ReservationWithDetails } from "../../lib/validation/validationInterfaces";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const { reservation, paymentId, documentId, language, action, date } = req.body;
+  const { reservation, paymentId, reservationId, language, action, date } = req.body;
   const { firstName, lastName, email } = reservation;
   const database = firebase.database();
   const reservations = database.ref("reservations");
@@ -28,7 +28,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         : process.env.MAILERSEND_CONFIRMATION_TEMPLATE_ID_ENGLISH
     )
     .setPersonalization(getPersonalization(reservation.email, action))
-    .setVariables(getVariables(reservation, language, paymentId, documentId, action, date));
+    .setVariables(getVariables(reservation, language, paymentId, reservationId, action, date));
 
   const emailParamsToCraftBeerSpa = new EmailParams()
     .setFrom(sentFrom)
@@ -37,7 +37,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     .setSubject(getSubject(true, action))
     .setTemplateId(process.env.MAILERSEND_ADMIN_TEMPLATE_ID)
     .setPersonalization(getPersonalization(process.env.ADMIN_EMAIL, action))
-    .setVariables(getVariables(reservation, language, paymentId, documentId, action, date, process.env.ADMIN_EMAIL));
+    .setVariables(getVariables(reservation, language, paymentId, reservationId, action, date, process.env.ADMIN_EMAIL));
 
   await mailerSend.email
     .send(emailParamsToCustomer)
@@ -82,12 +82,12 @@ const getVariables = (
   reservation: ReservationWithDetails,
   language: string,
   paymentId: string,
-  documentId: number,
+  reservationId: number,
   action: Action,
   amendedDate: Date,
   adminEmail?: string
 ) => {
-  const { firstName, lastName, email, phoneNumber, numberOfTubs, numberOfGuests, price } = reservation;
+  const { firstName, lastName, email, phoneNumber, numberOfTubs, numberOfGuests, price, requirements } = reservation;
 
   const date = getDate(language, amendedDate, reservation?.date);
 
@@ -159,8 +159,12 @@ const getVariables = (
           value: language === "hu-HU" ? "Rendezve" : "Paid"
         },
         {
-          var: "documentId",
-          value: documentId?.toString()
+          var: "reservationId",
+          value: reservationId?.toString()
+        },
+        {
+          var: "requirements",
+          value: requirements
         }
       ]
     }
