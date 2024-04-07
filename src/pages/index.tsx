@@ -15,11 +15,11 @@ import { useAppContext } from "../../context/appContext";
 import Options from "../components/options";
 import ReservationDate from "../components/reservationDate";
 import Summary from "../components/summary";
+
 import reservationStyles from "../styles/reservation.module.scss";
 import styles from "../styles/main.module.scss";
 import { ReservationDataShort } from "../lib/interfaces";
-
-import Logo from "../../public/assets/logo.svg";
+import Header from "../components/header";
 
 interface Props {
   currentReservations: ReservationDataShort[];
@@ -83,9 +83,7 @@ const Main: FC<Props> = ({ currentReservations }) => {
 
   return (
     <article className={styles.main}>
-      <div className={styles.iconContainer}>
-        <Logo />
-      </div>
+      <Header />
       <label className={reservationStyles.reservation__title}>
         <span>{t("index.reserveYourExperience")}</span>
       </label>
