@@ -24,12 +24,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 const createPartnerThenDocument = async (reservation, paymentId, headers, reservations, res) =>
   await axios
     .post(process.env.BILLINGO_PARTNER_URL, getCreatePartnerBody(reservation), { headers })
-    .then(async () => {
+    .then(async (response) => {
       console.log("Partner created successfully");
-      return getPartners(headers).then(async (partners: any[]) => {
-        const partnerId = getExistingPartner(reservation, partners)[0].id;
-        return await createDocument(reservation, paymentId, partnerId, headers, reservations, res);
-      });
+      return await createDocument(reservation, paymentId, response.data.id, headers, reservations, res);
     })
     .catch((e) => console.log("Error creating new partner", e));
 
@@ -172,5 +169,5 @@ const saveReceiptSentStatusAndDocumentId = async (reservations: any, paymentId: 
       [`${paymentId}/communication/receiptSent`]: true,
       [`${paymentId}/reservationId`]: documentId
     })
-    .then(() => console.log("Receipt sent status saved"))
+    .then(() => console.log("Receipt sent status saved successfully"))
     .catch((e) => console.log("Error saving receipt sent status", e));

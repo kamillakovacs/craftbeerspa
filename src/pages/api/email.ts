@@ -123,6 +123,10 @@ const getVariables = (
           value: adminEmail ?? email
         },
         {
+          var: "emailDisplay",
+          value: email
+        },
+        {
           var: "phoneNumber",
           value: phoneNumber
         },
@@ -164,7 +168,7 @@ const getVariables = (
         },
         {
           var: "requirements",
-          value: requirements
+          value: requirements ?? "--"
         }
       ]
     }
