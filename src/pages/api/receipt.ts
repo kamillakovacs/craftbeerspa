@@ -25,10 +25,10 @@ const createPartnerThenDocument = async (reservation, paymentId, headers, reserv
   await axios
     .post(process.env.BILLINGO_PARTNER_URL, getCreatePartnerBody(reservation), { headers })
     .then(async (response) => {
-      console.log("Partner created successfully");
+      console.info("Partner created successfully");
       return await createDocument(reservation, paymentId, response.data.id, headers, reservations, res);
     })
-    .catch((e) => console.log("Error creating new partner", e));
+    .catch((e) => console.error("Error creating new partner", e));
 
 const getExistingPartner = (reservation: ReservationWithDetails, partners: any[]) =>
   partners.filter(
@@ -48,10 +48,10 @@ const createDocument = async (
   await axios
     .post(process.env.BILLINGO_DOCUMENT_URL, getCreateDocumentBody(reservation, partnerId), { headers })
     .then(async (document: any) => {
-      console.log("Document created successfully");
+      console.info("Document created successfully");
       return sendDocument(document.data.id, reservation.email, headers, reservations, paymentId, res);
     })
-    .catch((e) => console.log("Error creating document", e.config.data, e.response.data));
+    .catch((e) => console.error("Error creating document", e.config.data, e.response.data));
 
 const sendDocument = async (
   documentId: number,
@@ -64,20 +64,20 @@ const sendDocument = async (
   await axios
     .post(`${process.env.BILLINGO_DOCUMENT_URL}/${documentId}/send`, { emails: [email] }, { headers })
     .then(async () => {
-      console.log("Document sent successfully");
+      console.info("Document sent successfully");
       await saveReceiptSentStatusAndDocumentId(reservations, paymentId, documentId);
       return res.status(200).json({ documentId });
     })
-    .catch((e) => console.log("Error emailing document to customer", e.config.data, e.response.data));
+    .catch((e) => console.error("Error emailing document to customer", e.config.data, e.response.data));
 
 const getPartners = async (headers: any) =>
   await axios
     .get(process.env.BILLINGO_PARTNER_URL, { headers })
     .then(async (response: any) => {
-      console.log("Partners pulled successfully");
+      console.info("Partners pulled successfully");
       return response.data.data;
     })
-    .catch((e) => console.log("Error pulling list of partners", e.config.data, e.response.data));
+    .catch((e) => console.error("Error pulling list of partners", e.config.data, e.response.data));
 
 const getCreatePartnerBody = (reservation: ReservationWithDetails) => {
   const { firstName, lastName, address, city, country, postCode, email, phoneNumber } = reservation;
@@ -169,5 +169,5 @@ const saveReceiptSentStatusAndDocumentId = async (reservations: any, paymentId: 
       [`${paymentId}/communication/receiptSent`]: true,
       [`${paymentId}/reservationId`]: documentId
     })
-    .then(() => console.log("Receipt sent status saved successfully"))
-    .catch((e) => console.log("Error saving receipt sent status", e));
+    .then(() => console.info("Receipt sent status saved successfully"))
+    .catch((e) => console.error("Error saving receipt sent status", e));

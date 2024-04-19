@@ -57,7 +57,7 @@ const EditReservation: FC<Props> = ({ reservation, currentReservations }) => {
         .post("/api/markUncancelable", { paymentId })
         .then((res) => res.data)
         .catch((e) => {
-          console.log("Error sending email confirming change");
+          console.error("Error sending email confirming change");
           return e;
         });
     if (!reservationIsMoreThan48HoursAway) {
@@ -118,7 +118,7 @@ const EditReservation: FC<Props> = ({ reservation, currentReservations }) => {
       })
       .then((res) => res.data)
       .catch((e) => {
-        console.log("Error sending email confirming change");
+        console.error("Error sending email confirming change");
         return e;
       });
 

@@ -119,63 +119,60 @@ const Details: FC<Props> = ({ customerAlreadyInDatabase }) => {
           validationSchema={details}
           validateOnChange
         >
-          {({ dirty, errors, values, handleSubmit }) => {
-            console.log(values);
-            return (
-              <form onSubmit={handleSubmit}>
-                <Customer />
-                <div className={detailsStyles.details__detailTitle}>
-                  <div className={`${styles.todoitem} ${styles.todoitem__cashier}`} />
-                  <label>{t("reservationDetails.summaryAndCheckout")}</label>
+          {({ dirty, errors, values, handleSubmit }) => (
+            <form onSubmit={handleSubmit}>
+              <Customer />
+              <div className={detailsStyles.details__detailTitle}>
+                <div className={`${styles.todoitem} ${styles.todoitem__cashier}`} />
+                <label>{t("reservationDetails.summaryAndCheckout")}</label>
+              </div>
+              <ReservationSummary
+                reservation={values}
+                date={data.date}
+                price={values.price}
+                paymentStatus={values.paymentStatus}
+              />
+              <div className={reservationStyles.reservation__barion__container}>
+                <div
+                  className={classNames(reservationStyles.reservation__checkbox, {
+                    [reservationStyles.reservation__checkbox__error]: errors.termsAndConditions
+                  })}
+                >
+                  <label>
+                    <Field type="checkbox" name="termsAndConditions" />
+                    {t("details.iAccept")}
+                  </label>
                 </div>
-                <ReservationSummary
-                  reservation={values}
-                  date={data.date}
-                  price={values.price}
-                  paymentStatus={values.paymentStatus}
-                />
-                <div className={reservationStyles.reservation__barion__container}>
-                  <div
-                    className={classNames(reservationStyles.reservation__checkbox, {
-                      [reservationStyles.reservation__checkbox__error]: errors.termsAndConditions
-                    })}
+                <div className={reservationStyles.reservation__checkbox}>
+                  <label>
+                    <Field type="checkbox" name="newsletter" />
+                    {t("details.newsletter")}
+                  </label>
+                </div>
+                <div className={reservationStyles.reservation__info}>
+                  <button
+                    className={`${reservationStyles.reservation__button} ${reservationStyles.reservation__back}`}
+                    type="button"
+                    onClick={goBack}
                   >
-                    <label>
-                      <Field type="checkbox" name="termsAndConditions" />
-                      {t("details.iAccept")}
-                    </label>
-                  </div>
-                  <div className={reservationStyles.reservation__checkbox}>
-                    <label>
-                      <Field type="checkbox" name="newsletter" />
-                      {t("details.newsletter")}
-                    </label>
-                  </div>
-                  <div className={reservationStyles.reservation__info}>
-                    <button
-                      className={`${reservationStyles.reservation__button} ${reservationStyles.reservation__back}`}
-                      type="button"
-                      onClick={goBack}
-                    >
-                      {t("details.back")}
-                    </button>
-                    <button
-                      type="submit"
-                      className={classnames(
-                        `${reservationStyles.reservation__button} ${reservationStyles.reservation__finish} ${reservationStyles.reservation__margin}`,
-                        {
-                          [reservationStyles.reservation__finish__enabled]: !!dirty && !Object.keys(errors).length
-                        }
-                      )}
-                    >
-                      {t("details.finishAndPay")}
-                    </button>
-                  </div>
-                  <Image src={barion} alt="barion-logo" />
+                    {t("details.back")}
+                  </button>
+                  <button
+                    type="submit"
+                    className={classnames(
+                      `${reservationStyles.reservation__button} ${reservationStyles.reservation__finish} ${reservationStyles.reservation__margin}`,
+                      {
+                        [reservationStyles.reservation__finish__enabled]: !!dirty && !Object.keys(errors).length
+                      }
+                    )}
+                  >
+                    {t("details.finishAndPay")}
+                  </button>
                 </div>
-              </form>
-            );
-          }}
+                <Image src={barion} alt="barion-logo" />
+              </div>
+            </form>
+          )}
         </Formik>
       </section>
     </article>

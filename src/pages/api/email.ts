@@ -47,12 +47,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           [`${paymentId}/communication/reservationEmailSent`]: true
         })
     )
-    .catch((e) => console.log(e));
+    .catch((e) => console.error(e));
 
   await mailerSend.email
     .send(emailParamsToCraftBeerSpa)
-    .then(() => console.log("Admin notification sent"))
-    .catch((e) => console.log(e));
+    .then(() => console.info("Admin notification sent"))
+    .catch((e) => console.error(e));
 
   return res.status(200).json({ success: true });
 }

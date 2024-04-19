@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FC, memo, useMemo, useState } from "react";
+import React, { ChangeEvent, FC, memo, useMemo } from "react";
 import Select, { ActionMeta } from "react-select";
 import classNames from "classnames";
 import { useFormikContext } from "formik";
@@ -11,12 +11,15 @@ import customerStyles from "../styles/customer.module.scss";
 import styles from "../styles/main.module.scss";
 
 const Customer: FC = () => {
-  const { t } = useTranslation("common");
-  const options = useMemo(() => countryList().getData(), []);
+  const { t, i18n } = useTranslation("common");
+
+  const options = useMemo(
+    () => (i18n.language == "hu-HU" ? Object.values(countryList().native().nativeData) : countryList().getData()),
+    []
+  );
+
   const { values, errors, touched, handleChange, setFieldValue, setFieldTouched } =
     useFormikContext<ReservationWithDetails>();
-  console.log("1", countryList());
-  console.log("2", countryList().native().nativeData.values());
 
   const onChangeInput = (e: ChangeEvent<HTMLInputElement>) => {
     setFieldTouched(e.target.name);
@@ -171,6 +174,12 @@ const Customer: FC = () => {
             fontWeight: "200",
             cursor: "pointer",
             paddingLeft: "10px"
+          }),
+          input: (baseStyles) => ({
+            ...baseStyles,
+            marginLeft: "12px",
+            color: "white",
+            textTransform: "capitalize"
           }),
           placeholder: (baseStyles) => ({
             ...baseStyles,
