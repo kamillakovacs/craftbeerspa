@@ -39,7 +39,8 @@ const Main: FC<Props> = ({ currentReservations }) => {
     lastName: "",
     phoneNumber: "",
     email: "",
-    paymentMethod: ""
+    paymentMethod: "",
+    canceled: null
   };
 
   const redirectToDetailsPage = (reservationData: ReservationWithDetails) => {
@@ -137,7 +138,8 @@ export async function getServerSideProps({ locale }) {
           .map((res: ReservationWithDetails) => ({
             date: res.date ?? null,
             numberOfGuests: res.numberOfGuests ?? null,
-            numberOfTubs: res.numberOfTubs ?? null
+            numberOfTubs: res.numberOfTubs ?? null,
+            canceled: res.canceled ?? null
           })) || []
       );
     } else {

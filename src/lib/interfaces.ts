@@ -2,6 +2,7 @@ export interface ReservationDataShort {
   date: Date;
   numberOfGuests: { label: string; value: number };
   numberOfTubs: { label: string; value: number };
+  canceled: CanceledBy;
 }
 
 export interface User {

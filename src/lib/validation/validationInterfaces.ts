@@ -6,6 +6,7 @@ export interface Reservation {
   numberOfGuests: { label: string; value: number };
   numberOfTubs: { label: string; value: number };
   price: string;
+  canceled: CanceledBy;
 }
 
 export interface ReservationWithDetails {

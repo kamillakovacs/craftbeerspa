@@ -1,18 +1,18 @@
-import "react-day-picker/dist/style.css";
-import { DayPicker } from "react-day-picker";
-import React, { FC, memo } from "react";
 import classnames from "classnames";
+import { enUS, hu } from "date-fns/locale";
 import { useFormikContext } from "formik";
-import { hu, enUS } from "date-fns/locale";
 import { useTranslation } from "next-i18next";
+import React, { FC, memo } from "react";
+import { DayPicker } from "react-day-picker";
+import "react-day-picker/dist/style.css";
 
 import CalendarIcon from "../../public/assets/calendar.svg";
 import ClockIcon from "../../public/assets/clock.svg";
 import { Reservation } from "../lib/validation/validationInterfaces";
 
-import dateStyles from "../styles/reservationDate.module.scss";
-import styles from "../styles/main.module.scss";
 import { ReservationDataShort } from "../lib/interfaces";
+import styles from "../styles/main.module.scss";
+import dateStyles from "../styles/reservationDate.module.scss";
 
 interface Props {
   currentReservations: ReservationDataShort[];
@@ -88,23 +88,22 @@ const Calendar: FC<Props> = ({ currentReservations, isExistingReservation }) => 
     const hoursReservedOnGivenDay = getReservationsOnDate(day).map((res: ReservationDataShort) =>
       new Date(res.date).getHours()
     );
-    const timesReservationOnDay: number[] = hoursReservedOnGivenDay.filter(
+    const timesReservedOnDay: number[] = hoursReservedOnGivenDay.filter(
       (hour, index) => hoursReservedOnGivenDay?.indexOf(hour) == index
     );
     const allTimesAreReservedOnGivenDay: boolean = [10, 12, 14, 16, 18, 20].every(
-      (time) => timesReservationOnDay?.includes(time)
+      (time) => timesReservedOnDay?.includes(time)
     );
 
     if (!allTimesAreReservedOnGivenDay) {
       return false;
     }
-
     return getReservationsOnDate(day).length > 0;
   };
 
   const getReservationsOnDate = (day: Date) =>
     Object.values(currentReservations).filter((res: ReservationDataShort) => {
-      if (res.date === null) {
+      if (res.date === null || !!res.canceled) {
         return;
       }
       // find if there are reservations on given day
@@ -126,7 +125,6 @@ const Calendar: FC<Props> = ({ currentReservations, isExistingReservation }) => 
     if (!currentReservations || !values.date) {
       return false;
     }
-
     const reservationsOnDateAndTime = Object.values(currentReservations).filter((res) => {
       if (time === null || time === undefined) {
         return;
@@ -145,7 +143,8 @@ const Calendar: FC<Props> = ({ currentReservations, isExistingReservation }) => 
         reservationDateAndTime.getDate(),
         reservationDateAndTime.getHours()
       );
-      return reservationDate.toISOString() === givenDayAndTime.toISOString();
+
+      return reservationDate.toISOString() === givenDayAndTime.toISOString() && !res.canceled;
     });
 
     return reservationsOnDateAndTime.length > 0;

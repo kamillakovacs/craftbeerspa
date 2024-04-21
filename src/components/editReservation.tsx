@@ -101,7 +101,8 @@ const EditReservation: FC<Props> = ({ reservation, currentReservations }) => {
     phoneNumber: reservation.phoneNumber,
     email: reservation.email,
     paymentMethod: reservation.paymentMethod,
-    reservationId: reservation.reservationId
+    reservationId: reservation.reservationId,
+    canceled: reservation.canceled
   };
 
   const onSubmit = async (values: Reservation) => {

@@ -1,6 +1,18 @@
 .header {
-  width: 250px;
-  height: 250px;
-  margin-bottom: 15px;
-  border-radius: 10px;
+  &__link {
+    color: white;
+    width: 650px;
+
+    a {
+      margin-right: 20px;
+      text-decoration: underline;
+    }
+  }
+
+  &__logo {
+    width: 250px;
+    height: 250px;
+    margin-bottom: 15px;
+    border-radius: 10px;
+  }
 }

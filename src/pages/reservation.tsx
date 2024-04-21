@@ -4,7 +4,7 @@ import axios from "axios";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useTranslation } from "next-i18next";
 
-import { Reservation as ReservationShort, ReservationWithDetails } from "../lib/validation/validationInterfaces";
+import { Reservation, ReservationWithDetails } from "../lib/validation/validationInterfaces";
 import ReservationDetails from "../components/reservationDetails";
 import Unsuccessful from "../components/unsuccessful";
 
@@ -19,7 +19,7 @@ interface Props {
   currentReservations: ReservationDataShort[];
 }
 
-const Reservation: FC<Props> = ({ reservation, paymentId, customerAlreadyInDatabase, currentReservations }) => {
+const ReservationPage: FC<Props> = ({ reservation, paymentId, customerAlreadyInDatabase, currentReservations }) => {
   const { i18n } = useTranslation("common");
 
   useEffect(() => {
@@ -87,10 +87,11 @@ export async function getServerSideProps({ query, locale }) {
           (res: ReservationWithDetails) =>
             res.paymentStatus === PaymentStatus.Succeeded && new Date(res.date) > new Date()
         )
-        .map((res: ReservationShort) => ({
+        .map((res: Reservation) => ({
           date: res.date ?? null,
           numberOfGuests: res.numberOfGuests ?? null,
-          numberOfTubs: res.numberOfTubs ?? null
+          numberOfTubs: res.numberOfTubs ?? null,
+          canceled: res.canceled ?? null
         })) || []
     );
   });
@@ -106,4 +107,4 @@ export async function getServerSideProps({ query, locale }) {
   };
 }
 
-export default memo(Reservation);
+export default memo(ReservationPage);

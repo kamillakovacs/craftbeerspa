@@ -83,7 +83,7 @@ const getCreatePartnerBody = (reservation: ReservationWithDetails) => {
   const { firstName, lastName, address, city, country, postCode, email, phoneNumber } = reservation;
 
   return {
-    name: `${firstName} ${lastName}`,
+    name: `${lastName} ${firstName}`,
     address: {
       country_code: country.value,
       post_code: postCode,
@@ -108,7 +108,7 @@ const getCreateDocumentBody = (reservation: ReservationWithDetails, partnerId: n
   type: "invoice",
   fulfillment_date: getDateOfPurchaseForBillingo(new Date(reservation.dateOfPurchase)),
   due_date: getDateOfPurchaseForBillingo(new Date(reservation.dateOfPurchase)),
-  payment_method: "bankcard",
+  payment_method: "barion",
   language: "hu",
   currency: "HUF",
   electronic: true,

@@ -48,7 +48,7 @@ const Customer: FC = () => {
   ];
 
   return (
-    <section className={customerStyles.customer}>
+    <>
       <div className={customerStyles.detailTitle}>
         <div
           className={classNames(`${styles.todoitem} ${styles.todoitem__one}`, {
@@ -300,7 +300,7 @@ const Customer: FC = () => {
         type="text"
         onChange={onChangeInput}
       />
-    </section>
+    </>
   );
 };
 

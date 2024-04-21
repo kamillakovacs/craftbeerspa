@@ -151,6 +151,7 @@
     display: flex;
     width: 100%;
     font-size: 22px;
+    margin-bottom: 20px;
 
     input {
       margin-right: 10px;
@@ -160,6 +161,23 @@
       input {
         outline: 2px solid red;
       }
+    }
+
+    p {
+      font-size: 20px;
+      font-weight: 400;
+      color: #bcbcbc;
+      width: 700px;
+      text-align: center;
+      font-family:
+        Roboto,
+        Oxygen,
+        Ubuntu,
+        Cantarell,
+        Fira Sans,
+        Droid Sans,
+        Helvetica Neue,
+        sans-serif !important;
     }
   }
 }

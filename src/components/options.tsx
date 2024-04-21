@@ -20,26 +20,28 @@ const Options: FC<Props> = ({ currentReservations }) => {
   const { values, touched, setFieldValue, setFieldTouched } = useFormikContext<Reservation>();
   const { t } = useTranslation("common");
   const AVAILABLE_TUBS = 3;
-  const reservationsSelectedOnDateAndTime = currentReservations && Object.values(currentReservations).filter((res) => {
-    if (!values.date) {
-      return [];
-    }
+  const reservationsSelectedOnDateAndTime =
+    currentReservations &&
+    Object.values(currentReservations).filter((res) => {
+      if (!values.date) {
+        return [];
+      }
 
-    let selectedDateAndTime = new Date(
-      values.date.getFullYear(),
-      values.date.getMonth(),
-      values.date.getDate(),
-      values.date.getHours()
-    );
-    let reservationDateAndTime = new Date(res.date);
-    let reservationDate = new Date(
-      reservationDateAndTime.getFullYear(),
-      reservationDateAndTime.getMonth(),
-      reservationDateAndTime.getDate(),
-      reservationDateAndTime.getHours()
-    );
-    return reservationDate.toISOString() === selectedDateAndTime.toISOString();
-  });
+      let selectedDateAndTime = new Date(
+        values.date.getFullYear(),
+        values.date.getMonth(),
+        values.date.getDate(),
+        values.date.getHours()
+      );
+      let reservationDateAndTime = new Date(res.date);
+      let reservationDate = new Date(
+        reservationDateAndTime.getFullYear(),
+        reservationDateAndTime.getMonth(),
+        reservationDateAndTime.getDate(),
+        reservationDateAndTime.getHours()
+      );
+      return reservationDate.toISOString() === selectedDateAndTime.toISOString();
+    });
 
   useEffect(() => {
     if (values.numberOfGuests) {
@@ -55,7 +57,7 @@ const Options: FC<Props> = ({ currentReservations }) => {
           return process.env.NEXT_PUBLIC_ONE_ONE_PRICE;
         case t("options.twoPeopleInOneTub"):
           return process.env.NEXT_PUBLIC_TWO_ONE_PRICE;
-        case t("options.twoPeTopleInTwoTubs"):
+        case t("options.twoPeopleInTwoTubs"):
           return process.env.NEXT_PUBLIC_TWO_TWO_PRICE;
         case t("options.threePeopleInTwoTubs"):
           return process.env.NEXT_PUBLIC_THREE_TWO_PRICE;
@@ -66,9 +68,9 @@ const Options: FC<Props> = ({ currentReservations }) => {
         case t("options.fourPeopleInThreeTubs"):
           return process.env.NEXT_PUBLIC_FOUR_THREE_PRICE;
         case t("options.threeTubs"):
-          return values.numberOfGuests.value === 5 ?
-            process.env.NEXT_PUBLIC_FIVE_THREE_PRICE :
-            process.env.NEXT_PUBLIC_SIX_THREE_PRICE;
+          return values.numberOfGuests.value === 5
+            ? process.env.NEXT_PUBLIC_FIVE_THREE_PRICE
+            : process.env.NEXT_PUBLIC_SIX_THREE_PRICE;
       }
     };
 
@@ -199,7 +201,7 @@ const Options: FC<Props> = ({ currentReservations }) => {
                 "@media only screen and (max-width: 500px)": {
                   marginLeft: "20px",
                   width: "450px"
-                },
+                }
               }),
               control: (baseStyles) => ({
                 ...baseStyles,
@@ -214,7 +216,7 @@ const Options: FC<Props> = ({ currentReservations }) => {
                 ":hover": { borderColor: "#707070", boxShadow: "0 0 0 1px #707070" },
                 "@media only screen and (max-width: 500px)": {
                   width: "auto"
-                },
+                }
               }),
               valueContainer: (baseStyles) => ({
                 ...baseStyles,
@@ -223,18 +225,18 @@ const Options: FC<Props> = ({ currentReservations }) => {
                 marginLeft: "50px",
                 "@media only screen and (max-width: 500px)": {
                   marginLeft: "5px"
-                },
+                }
               }),
               singleValue: (baseStyles) => ({
                 ...baseStyles,
-                color: "white",
+                color: "white"
               }),
               placeholder: (baseStyles) => ({
                 ...baseStyles,
                 color: "white",
                 "@media only screen and (max-width: 500px)": {
                   marginLeft: "2px"
-                },
+                }
               }),
               indicatorSeparator: (baseStyles) => ({
                 ...baseStyles,
@@ -256,8 +258,8 @@ const Options: FC<Props> = ({ currentReservations }) => {
                 alignItems: "center",
                 fontWeight: "200",
                 cursor: "pointer",
-                paddingLeft: "10px",
-              }),
+                paddingLeft: "10px"
+              })
             }}
             // className={optionStyles.select}
             options={getTubOptions()}
