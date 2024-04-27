@@ -196,30 +196,33 @@ const Calendar: FC<Props> = ({ currentReservations, isExistingReservation }) => 
           </div>
         )}
       </div>
-      <div className={dateStyles.reservationDate__timeResponsive}>
-        <div className={dateStyles.reservationDate__timeResponsiveTitle}>
-          <div className={styles.iconContainer}>
-            <ClockIcon className={classnames(`${dateStyles.reservationDate__clockIcon} clockIcon`)} />
+      {values.date && (
+        <div className={dateStyles.reservationDate__timeResponsive}>
+          <div className={dateStyles.reservationDate__timeResponsiveTitle}>
+            <div className={styles.iconContainer}>
+              <ClockIcon className={classnames(`${dateStyles.reservationDate__clockIcon} clockIcon`)} />
+            </div>
+            <span>{t("reservationDate.time")}</span>
           </div>
-          <span>{t("reservationDate.time")}</span>
+          <div
+            className={classnames(`${dateStyles.reservationDate__timeResponsiveOptions} reservationDate__timeOptions`)}
+          >
+            {timeOptions.map((time, index) => (
+              <button
+                key={index}
+                type="button"
+                className={classnames({
+                  [dateStyles.reservationDate__timeResponsiveOptionsDisabled]:
+                    allTubsAreReservedForGivenDayAndTime(time)
+                })}
+                onClick={selectTime}
+              >
+                {time}
+              </button>
+            ))}
+          </div>
         </div>
-        <div
-          className={classnames(`${dateStyles.reservationDate__timeResponsiveOptions} reservationDate__timeOptions`)}
-        >
-          {timeOptions.map((time, index) => (
-            <button
-              key={index}
-              type="button"
-              className={classnames({
-                [dateStyles.reservationDate__timeResponsiveOptionsDisabled]: allTubsAreReservedForGivenDayAndTime(time)
-              })}
-              onClick={selectTime}
-            >
-              {time}
-            </button>
-          ))}
-        </div>
-      </div>
+      )}
     </>
   );
 };
