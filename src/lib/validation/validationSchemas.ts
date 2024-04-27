@@ -36,10 +36,17 @@ export const details = Yup.object().shape({
   price: Yup.string().required("Required"),
   firstName: Yup.string().required("Required"),
   lastName: Yup.string().required("Required"),
-  phoneNumber: Yup.string()
-    .matches(phoneRegex, "Please enter a valid phone number. (06301234567, +36201234567, 123-456-7890)")
+  address: Yup.string().required("Required"),
+  city: Yup.string().required("Required"),
+  postCode: Yup.string().required("Required"),
+  country: Yup.object()
+    .shape({
+      value: Yup.string(),
+      label: Yup.string()
+    })
     .required("Required"),
   email: Yup.string().email("Please enter a valid email address").required("Required"),
+  phoneNumber: Yup.string().required("Required"),
   whereYouHeard: Yup.object().shape({
     value: Yup.string().required("Required"),
     label: Yup.string().required("Required")
