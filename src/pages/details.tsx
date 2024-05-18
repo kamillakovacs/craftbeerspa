@@ -147,6 +147,7 @@ const Details: FC<Props> = ({ customerAlreadyInDatabase }) => {
                         <a
                           href="https://craftbeerspa.hu/wp-content/uploads/2024/05/craftbeerspa-szolgaltatasi-felhasznalasi-feltetelek.pdf"
                           target="_blank"
+                          rel="noreferrer"
                         />
                       </Trans>
                     </label>
