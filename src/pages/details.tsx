@@ -6,7 +6,7 @@ import { Field, Formik } from "formik";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useTranslation } from "next-i18next";
+import { Trans, useTranslation } from "next-i18next";
 
 import { useAppContext } from "../../context/appContext";
 import * as payment from "../api/paymentRequest";
@@ -23,6 +23,7 @@ import barion from "../../public/assets/barion-card-strip-intl__medium.png";
 import styles from "../styles/main.module.scss";
 import detailsStyles from "../styles/details.module.scss";
 import customerStyles from "../styles/customer.module.scss";
+import Link from "next/link";
 
 interface Props {
   customerAlreadyInDatabase: boolean;
@@ -142,7 +143,12 @@ const Details: FC<Props> = ({ customerAlreadyInDatabase }) => {
                   >
                     <label>
                       <Field type="checkbox" name="termsAndConditions" />
-                      {t("details.iAccept")}
+                      <Trans i18nKey="details.iAccept">
+                        <a
+                          href="https://craftbeerspa.hu/wp-content/uploads/2024/05/craftbeerspa-szolgaltatasi-felhasznalasi-feltetelek.pdf"
+                          target="_blank"
+                        />
+                      </Trans>
                     </label>
                   </div>
                   <div className={reservationStyles.reservation__checkbox}>

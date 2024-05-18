@@ -61,7 +61,7 @@
     "huf": "HUF"
   },
   "details": {
-    "iAccept": "I accept the Terms of Service.",
+    "iAccept": "I accept the <u><0>Terms of Service.</0></u>",
     "newsletter": "I'd like to hear about future promotions and events.",
     "yourDetails": "Your Details",
     "complete": "Complete",
