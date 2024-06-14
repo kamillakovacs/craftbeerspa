@@ -181,7 +181,7 @@ const getVariables = (
 
 const getDate = (language: string, date: Date, amendedDate?: Date) => {
   if (amendedDate === undefined) {
-    console.log("here date");
+    console.log("here date", date, "language", language);
 
     return new Intl.DateTimeFormat(language, {
       month: "2-digit",
@@ -189,7 +189,7 @@ const getDate = (language: string, date: Date, amendedDate?: Date) => {
       year: "numeric",
       hour: "2-digit",
       minute: "2-digit"
-    }).format(new Date(date));
+    }).format(date);
   } else {
     console.log("here amendeddate");
     return new Intl.DateTimeFormat(language, {
@@ -198,7 +198,7 @@ const getDate = (language: string, date: Date, amendedDate?: Date) => {
       year: "numeric",
       hour: "2-digit",
       minute: "2-digit"
-    }).format(new Date(amendedDate));
+    }).format(amendedDate);
   }
 };
 
