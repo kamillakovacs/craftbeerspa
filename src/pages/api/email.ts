@@ -93,6 +93,7 @@ const getVariables = (
   const { firstName, lastName, email, phoneNumber, numberOfTubs, numberOfGuests, price, requirements } = reservation;
 
   const date = getDate(language, reservation?.date, amendedDate);
+  console.log("date", date);
 
   const dateOfPurchase = new Intl.DateTimeFormat(language, {
     month: "2-digit",
@@ -178,14 +179,28 @@ const getVariables = (
   ];
 };
 
-const getDate = (language: string, date: Date, amendedDate?: Date) =>
-  new Intl.DateTimeFormat(language, {
-    month: "2-digit",
-    day: "2-digit",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit"
-  }).format(new Date(amendedDate ? amendedDate : date));
+const getDate = (language: string, date: Date, amendedDate?: Date) => {
+  if (amendedDate === undefined) {
+    console.log("here date");
+
+    return new Intl.DateTimeFormat(language, {
+      month: "2-digit",
+      day: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit"
+    }).format(new Date(date));
+  } else {
+    console.log("here amendeddate");
+    return new Intl.DateTimeFormat(language, {
+      month: "2-digit",
+      day: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit"
+    }).format(new Date(amendedDate));
+  }
+};
 
 const getMessage = (language: string, action: Action) => {
   switch (action) {
