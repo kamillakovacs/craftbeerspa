@@ -7,7 +7,8 @@ import { currencyFormat } from "../../lib/util/currencyFormat";
 import { ReservationWithDetails } from "../../lib/validation/validationInterfaces";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const { reservation, paymentId, reservationId, language, action, date } = req.body;
+  const { reservation, paymentId, reservationId, language, action, amendedDate } = req.body;
+  console.info("language", language, "amended date", amendedDate);
   const { firstName, lastName, email } = reservation;
   const database = firebase.database();
   const reservations = database.ref("reservations");
@@ -28,7 +29,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         : process.env.MAILERSEND_CONFIRMATION_TEMPLATE_ID_ENGLISH
     )
     .setPersonalization(getPersonalization(reservation.email, action))
-    .setVariables(getVariables(reservation, language, paymentId, reservationId, action, date));
+    .setVariables(getVariables(reservation, language, paymentId, reservationId, action, amendedDate));
 
   const emailParamsToCraftBeerSpa = new EmailParams()
     .setFrom(sentFrom)
@@ -37,7 +38,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     .setSubject(getSubject(true, action))
     .setTemplateId(process.env.MAILERSEND_ADMIN_TEMPLATE_ID)
     .setPersonalization(getPersonalization(process.env.ADMIN_EMAIL, action))
-    .setVariables(getVariables(reservation, language, paymentId, reservationId, action, date, process.env.ADMIN_EMAIL));
+    .setVariables(
+      getVariables(reservation, language, paymentId, reservationId, action, amendedDate, process.env.ADMIN_EMAIL)
+    );
 
   await mailerSend.email
     .send(emailParamsToCustomer)
@@ -84,12 +87,12 @@ const getVariables = (
   paymentId: string,
   reservationId: number,
   action: Action,
-  amendedDate: Date,
+  amendedDate?: Date,
   adminEmail?: string
 ) => {
   const { firstName, lastName, email, phoneNumber, numberOfTubs, numberOfGuests, price, requirements } = reservation;
 
-  const date = getDate(language, amendedDate, reservation?.date);
+  const date = getDate(language, reservation?.date, amendedDate);
 
   const dateOfPurchase = new Intl.DateTimeFormat(language, {
     month: "2-digit",
@@ -175,7 +178,7 @@ const getVariables = (
   ];
 };
 
-const getDate = (language: string, amendedDate: Date, date: Date) =>
+const getDate = (language: string, date: Date, amendedDate?: Date) =>
   new Intl.DateTimeFormat(language, {
     month: "2-digit",
     day: "2-digit",
