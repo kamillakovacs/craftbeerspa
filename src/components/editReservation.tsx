@@ -114,7 +114,7 @@ const EditReservation: FC<Props> = ({ reservation, currentReservations }) => {
       year: "numeric",
       hour: "2-digit",
       minute: "2-digit"
-    }).format(new Date(date));
+    }).format(new Date(values.date));
 
     await axios
       .post("/api/email", {
