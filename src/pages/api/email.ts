@@ -179,28 +179,14 @@ const getVariables = (
   ];
 };
 
-const getDate = (language: string, date: Date, amendedDate?: Date) => {
-  if (amendedDate === undefined) {
-    console.log("here date", date, "language", language);
-
-    return new Intl.DateTimeFormat(language, {
-      month: "2-digit",
-      day: "2-digit",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit"
-    }).format(date);
-  } else {
-    console.log("here amendeddate");
-    return new Intl.DateTimeFormat(language, {
-      month: "2-digit",
-      day: "2-digit",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit"
-    }).format(amendedDate);
-  }
-};
+const getDate = (language: string, date: Date, amendedDate?: Date) =>
+  new Intl.DateTimeFormat(language, {
+    month: "2-digit",
+    day: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit"
+  }).format(new Date(amendedDate ? amendedDate : date));
 
 const getMessage = (language: string, action: Action) => {
   switch (action) {

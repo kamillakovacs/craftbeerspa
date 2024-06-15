@@ -75,11 +75,11 @@ const Details: FC<Props> = ({ customerAlreadyInDatabase }) => {
 
   const onSubmit = async (values: ReservationWithDetails) => {
     const reservationData: ReservationWithDetails = {
-      date: data.date,
+      date: values.date,
       dateOfPurchase: new Date(),
-      numberOfGuests: data.numberOfGuests,
-      numberOfTubs: data.numberOfTubs,
-      price: data.price,
+      numberOfGuests: values.numberOfGuests,
+      numberOfTubs: values.numberOfTubs,
+      price: values.price,
       firstName: values.firstName,
       lastName: values.lastName,
       phoneNumber: values.phoneNumber,
