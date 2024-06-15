@@ -91,6 +91,7 @@ const getVariables = (
   adminEmail?: string
 ) => {
   const { firstName, lastName, email, phoneNumber, numberOfTubs, numberOfGuests, price, requirements } = reservation;
+  console.log("resdate", reservation?.date);
 
   const localizedDate = getDate(language, reservation?.date, amendedDate);
   console.log("date", localizedDate, "resdate", reservation?.date);
