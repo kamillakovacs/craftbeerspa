@@ -23,6 +23,14 @@ const ReservationPage: FC<Props> = ({ reservation, paymentId, customerAlreadyInD
   const { i18n } = useTranslation("common");
 
   useEffect(() => {
+    const localizedDate = new Intl.DateTimeFormat(i18n.language, {
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+      hour: "numeric",
+      minute: "numeric"
+    }).format(new Date(reservation?.date));
+
     const createAndSendReceipt = async () =>
       await axios
         .post("/api/receipt", { reservation, paymentId })
@@ -31,7 +39,14 @@ const ReservationPage: FC<Props> = ({ reservation, paymentId, customerAlreadyInD
 
     const createAndSendConfirmationEmail = async (reservationId: number) =>
       await axios
-        .post("/api/email", { reservation, paymentId, reservationId, language: i18n.language, action: Action.None })
+        .post("/api/email", {
+          localizedDate,
+          reservation,
+          paymentId,
+          reservationId,
+          language: i18n.language,
+          action: Action.None
+        })
         .then((res) => res.data)
         .catch((e) => console.error(e));
 

@@ -108,14 +108,22 @@ const EditReservation: FC<Props> = ({ reservation, currentReservations }) => {
   const onSubmit = async (values: Reservation) => {
     setDate(values.date);
 
+    const localizedDate = new Intl.DateTimeFormat(i18n.language, {
+      month: "2-digit",
+      day: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit"
+    }).format(new Date(date));
+
     await axios
       .post("/api/email", {
+        localizedDate,
         reservation,
         paymentId,
         reservationId: reservation.reservationId,
         language: i18n.language,
-        action: Action.Change,
-        date
+        action: Action.Change
       })
       .then((res) => res.data)
       .catch((e) => {
