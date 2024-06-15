@@ -92,8 +92,8 @@ const getVariables = (
 ) => {
   const { firstName, lastName, email, phoneNumber, numberOfTubs, numberOfGuests, price, requirements } = reservation;
 
-  const date = getDate(language, reservation?.date, amendedDate);
-  console.log("date", date);
+  const localizedDate = getDate(language, reservation?.date, amendedDate);
+  console.log("date", localizedDate, "resdate", reservation?.date);
 
   const dateOfPurchase = new Intl.DateTimeFormat(language, {
     month: "2-digit",
@@ -113,7 +113,7 @@ const getVariables = (
         },
         {
           var: "date",
-          value: date
+          value: localizedDate
         },
         {
           var: "tubsAndGuests",
