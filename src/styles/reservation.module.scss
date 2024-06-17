@@ -1,13 +1,13 @@
 .reservation {
   height: auto;
-  width: auto;
+  width: 700px;
   margin-top: 2px;
 
   &__title {
-    font-size: 24px;
+    font-size: 36px;
     margin-bottom: 44px;
-    display: inline-block;
-    align-self: flex-start;
+    display: flex;
+    justify-content: center;
 
     span {
       margin-left: 30px !important;
@@ -18,6 +18,18 @@
   &__info {
     display: flex;
     align-items: center;
+    margin: 10px 0 30px;
+
+    &Container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-left: 32px;
+
+      @media only screen and (max-width: 500px) {
+        margin-left: 0;
+      }
+    }
   }
 
   &__price {
@@ -38,32 +50,144 @@
 
   &__button {
     background-color: #fcb923;
+    cursor: pointer;
     border: none;
     border-radius: 20px;
-    font-size: 16px;
-    height: 50px;
+    font-size: 22px;
+    min-height: 60px;
     margin-top: 20px;
-    cursor: pointer;
+    padding: 15px;
 
     &:focus {
       outline: none;
     }
+
+    &__container {
+      display: flex;
+      justify-content: flex-end;
+    }
   }
 
   &__continue {
-    margin: 20px 0 0 -25px;
-    width: 124px;
+    background-color: #707070;
+    margin: 20px 0 0 25px;
+    width: 150px;
+    font-size: 20px;
+    cursor: not-allowed;
+
+    &__enabled {
+      background-color: #fcb923;
+      cursor: pointer;
+    }
+
+    @media only screen and (max-width: 500px) {
+      width: 300px;
+    }
   }
 
   &__back {
-    margin: 40px 10px 0 -13px;
-    width: 85px;
-    background-color: #343434;
-    color: #707070;
+    width: 100px;
+    background-color: #fcb923;
+    color: #111111;
+  }
+
+  &__margin {
+    margin-left: 10px;
+  }
+
+  &__largemargin {
+    margin-left: 30px;
   }
 
   &__finish {
-    margin: 40px 0 0 10px;
-    width: 120px;
+    width: 150px;
+    background-color: #343434;
+    color: #707070;
+
+    &__enabled {
+      background-color: #fcb923;
+      color: #111111;
+      cursor: pointer;
+    }
+  }
+
+  &__barion__container {
+    display: flex;
+    flex-direction: column;
+    margin: 25px 0 0 24px;
+    align-items: center;
+  }
+
+  &__updated {
+    display: flex;
+    align-items: center;
+    height: 100%;
+
+    &__text {
+      height: 50px;
+      display: flex;
+      align-items: center;
+      margin: 20px 0 0 20px;
+    }
+  }
+
+  &__finishchange {
+    width: 250px;
+  }
+
+  &__section {
+    margin: 90px 0 0 0;
+    color: white;
+    font-weight: 200;
+  }
+
+  &__editSection {
+    margin: 40px 0 0 0;
+    color: white;
+    font-weight: 200;
+  }
+
+  &__checkbox {
+    display: flex;
+    width: 100%;
+    font-size: 22px;
+    margin-bottom: 20px;
+
+    input {
+      margin-right: 10px;
+    }
+
+    &__error {
+      input {
+        outline: 2px solid red;
+      }
+    }
+
+    p {
+      font-size: 20px;
+      font-weight: 400;
+      color: #bcbcbc;
+      width: 700px;
+      text-align: center;
+      font-family:
+        Roboto,
+        Oxygen,
+        Ubuntu,
+        Cantarell,
+        Fira Sans,
+        Droid Sans,
+        Helvetica Neue,
+        sans-serif !important;
+    }
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  .reservation {
+    width: 500px;
+
+    &__logoContainer {
+      margin: 0 25px;
+    }
   }
 }

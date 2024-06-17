@@ -1,4 +1,5 @@
 import React, { FC, memo } from "react";
+
 import Accordion from "../components/accordion";
 
 const Packages: FC = () => {
@@ -7,9 +8,7 @@ const Packages: FC = () => {
       <span className="Packages__title">Our Experience Options</span>
       <Accordion
         title={"Experience 1"}
-        subTitle={
-          "Infra Sauna, Beer Spa, Relaxing Straw Bed, Snacks, Unlimited Beer, Swedish Massage"
-        }
+        subTitle={"Infra Sauna, Beer Spa, Relaxing Straw Bed, Snacks, Unlimited Beer, Swedish Massage"}
         description={
           "Description of spa product Description of spa product Description of spa product Description of spa product Description of spa product Description of spa product"
         }
@@ -17,18 +16,14 @@ const Packages: FC = () => {
 
       <Accordion
         title={"Experience 2"}
-        subTitle={
-          "Infra Sauna, Beer Spa, Relaxing Straw Bed, Snacks, Unlimited Beer"
-        }
+        subTitle={"Infra Sauna, Beer Spa, Relaxing Straw Bed, Snacks, Unlimited Beer"}
         description={
           "Description of spa product Description of spa product Description of spa product Description of spa product Description of spa product Description of spa product"
         }
       />
       <Accordion
         title={"Experience 3"}
-        subTitle={
-          "Beer Spa, Relaxing Straw Bed, Unlimited Beer, Swedish Massage"
-        }
+        subTitle={"Beer Spa, Relaxing Straw Bed, Unlimited Beer, Swedish Massage"}
         description={
           "Description of spa product Description of spa product Description of spa product Description of spa product Description of spa product Description of spa product"
         }

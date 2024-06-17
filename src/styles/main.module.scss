@@ -4,6 +4,9 @@
   align-items: center;
   background-color: #222222;
   padding-bottom: 50px;
+  padding: 40px 0;
+  min-width: 550px;
+
 
   label {
     font-weight: 400;
@@ -12,6 +15,7 @@
 
   &__container {
     display: flex;
+    justify-content: center;
     color: white;
     font-weight: 600;
     width: 95%;
@@ -20,14 +24,14 @@
   .navigators {
     .verticalLine {
       border-left: 1px solid #343434;
-      height: 390px;
+      height: 500px;
       margin: 32px 0 10px 12px;
     }
 
     .verticalLine2 {
       border-left: 1px solid #343434;
-      height: 300px;
-      margin: 40px 0 10px 12px;
+      height: 130px;
+      margin: 5px 0 10px 12px;
     }
 
     .verticalLineDetails {
@@ -51,6 +55,7 @@
     from {
       background-image: url("/assets/one.svg");
     }
+
     to {
       background-image: url("/assets/checkmark.svg");
     }
@@ -83,6 +88,10 @@
     }
 
     &__four {
+      background-image: url("/assets/four.svg");
+    }
+
+    &__cashier {
       background-image: url("/assets/cashier.svg");
     }
 
@@ -105,5 +114,10 @@
     color: #222222;
     position: relative;
     left: -13px;
+  }
+
+  .iconContainer {
+    width: 24px;
+    height: 24px;
   }
 }

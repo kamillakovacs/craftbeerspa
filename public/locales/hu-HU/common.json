@@ -1,0 +1,129 @@
+{
+  "index": {
+    "reserveYourExperience": "Foglald le a privát sörfürdődet!",
+    "continue": "Tovább"
+  },
+  "reservationDate": {
+    "dateAndTime": "Foglalásod időpontja",
+    "time": "idő",
+    "changeReservationDate": "Időpont megváltoztatása",
+    "cancelReservation": "Foglalás törlése",
+    "finalizeDateChange": "Beküldés",
+    "updated": "Köszönjük, a dátumot módosítottuk.",
+    "updateError": "Nem sikerült módosítani a dátumot, kérjük hívjon telefonon."
+  },
+  "options": {
+    "noOptions": "Jelöld be a vendégek számát",
+    "numberOfPeopleAndTubs": "Hány főre, hány dézsát foglalsz?",
+    "selectGuests": "Vendégek",
+    "selectTubs": "Dézsák",
+    "openParentheses": "(",
+    "tubs": "dézsa",
+    "tub": "dézsa",
+    "forMax": "max",
+    "peopleAtSelectedTime": "fő részére még elérhető ebben az időpontban.)",
+    "noTubsAtSelectedTime": "Nincs szabad dézsa erre az időpontra",
+    "oneTub": "1 dézsa",
+    "twoPeopleInOneTub": "2 fő részére 1 dézsa",
+    "twoPeopleInTwoTubs": "2 fő részére 2 dézsa",
+    "threePeopleInTwoTubs": "3 fő részére 2 dézsa",
+    "threePeopleInThreeTubs": "3 fő részére 3 dézsa",
+    "fourPeopleInTwoTubs": "4 fő részére 2 dézsa",
+    "fourPeopleInThreeTubs": "4 fő részére 3 dézsa",
+    "threeTubs": "3 dézsa",
+    "onePerson": "1 fő",
+    "twoPeople": "2 fő",
+    "threePeople": "3 fő",
+    "fourPeople": "4 fő",
+    "fivePeople": "5 fő",
+    "sixPeople": "6 fő"
+  },
+  "summary": {
+    "youCanEnjoy": "A Craft Beer Spa termében a következőket élvezheted",
+    "details": "A Craft Beer Spa foglalásod részletei",
+    "yourExperience": "A Craft Beer Spa élményed tartalmazza",
+    "infraredSauna": "Turmalinos infraszaunát a méregtelenítésre",
+    "bath": "100% természetes anyagokat (sörkivonatokat és gyögynövényeket) tartalmazó dézsafürdőzést akácfa dézsákban",
+    "ofBeerBath": " sörfürdőben",
+    "strawBed": "Relaxációt valódi búzaszalma ágyon",
+    "snacks": "Sörkorcsolyát",
+    "unlimitedBeer": "Korlátlan mennyiségű csapolt sörfogyasztást, hazai mikrofőzdék kínálatából",
+    "towelsAndRobes": "Törölközőt, fürdőlepedőt",
+    "exclusiveUse": "A sörterápiás szoba privát használatát",
+    "total": "Összesen: ",
+    "vat": "(ÁFA-val)",
+    "huf": "Ft."
+  },
+  "details": {
+    "iAccept": "Elfogadom a <0>Felhasználói Szerződést</0>.",
+    "newsletter": "Szeretnék értesülni az aktuális promóciókról és eseményekről.",
+    "yourDetails": "Személyes adataid",
+    "complete": "Beküldés",
+    "finishAndPay": "Fizetés",
+    "back": "Vissza",
+    "business": "Céges foglalás esetén keress minket a craftbeerspa@gmail.com email címen vagy a +36 70 679 5775 telefonszámon."
+  },
+  "customer": {
+    "personalInformation": "Személyes adatok",
+    "contactInformation": "Elérhetőség",
+    "webSearch": "Netes kereső",
+    "friendOrFamily": "Ismerős vagy családtag",
+    "advertisement": "Hirdetés",
+    "tripAdvisor": "Trip Advisor",
+    "facebook": "Facebook",
+    "instagram": "Instagram",
+    "hotel": "Szállás",
+    "name": "Név",
+    "firstName": "Keresztnév",
+    "lastName": "Vezetéknév",
+    "address": "Utca, házszám",
+    "city": "Város",
+    "postCode": "Irányítószám",
+    "country": "Ország",
+    "email": "Email cím",
+    "phone": "Telefon",
+    "whereDidYouHearAboutUs": "Hol hallottál rólunk?",
+    "note": "Megjegyzés",
+    "requirements": "Allergia, speciális igények",
+    "select": "Válassz"
+  },
+  "price": {
+    "paymentMethods": "Fizetési lehetőségek",
+    "bankTransfer": "Utalás",
+    "creditCard": "Bankkártya"
+  },
+  "thanks": {
+    "thankYou": "Köszönjük a foglalást",
+    "yourReservation": "Craft Beer Spa foglalásod Részletei",
+    "lookForwardToSeeingYou": "Várunk szeretettel a Craft Beer Spa-ban",
+    "thisReservationWasCanceled": "A foglalásodat töröltük.",
+    "contactUsForARefund": "Kérjük küldd el a neved, címed, és bankszámla adataid a craftbeerspa@gmail.com címre, és 7 napon belül visszautaljuk a foglalásod értékét, mínusz egy 1,5% kezelési költséget."
+  },
+  "reservationDetails": {
+    "summaryAndCheckout": "Összegzés",
+    "location": "Helyszín",
+    "craftBeerSpa": "Craft Beer Spa",
+    "szarvasko": "3323 Szarvaskő, Borsod u. 9.",
+    "tubsReserved": "Dézsák",
+    "date": "Időpont",
+    "lengthOfStay": "Időtartam",
+    "hourAndFifteenMins": "70 perc",
+    "totalPrice": "Fizetendő",
+    "dateOfPurchase": "Rendezve",
+    "paymentStatus": "Fizetés státusza",
+    "paid": "Fizetve",
+    "outstanding": "Nem fizetve",
+    "billingDetails": "Számlázási adatok",
+    "lookForwardToSeeingYou": "Várunk szeretettel!",
+    "notSuccessful": "Sikertelen fizetés",
+    "submitPaymentAgain": "Kérjük, próbálkozz újra!"
+  },
+  "receipt": {
+    "receiptFromShareSpa": "Craft Beer Spa nyugta",
+    "receiptEmailBody": "A nyugta"
+  },
+  "email": {
+    "initial": "Boldog szeretettel várunk a Craft Beer Spa-ban! Köszönjük, hogy ellátogatsz hozzánk.",
+    "changed": "Foglalásod időpontját frissítettük."
+  }
+}

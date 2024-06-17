@@ -1,11 +1,37 @@
 .options {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 40px 0 10px;
+  justify-content: flex-start;
+  margin: 50px 0 20px;
 
   label {
+    margin-left: 10px;
+    font-size: 22px;
+  }
+
+  &__icon {
+    position: relative;
+    left: 40px;
+    z-index: 2;
+
+    @media only screen and (max-width: 500px) {
+      display: none;
+    }
+  }
+
+  &__tubsLabel {
+    display: flex;
     width: 100%;
+    justify-content: space-between;
+    margin-right: 20px;
+  }
+
+  &__availableTubs {
+    display: flex;
+    align-items: center;
+    font-weight: 200;
+    font-size: 12px;
+    color: #bcbcbc;
     margin-left: 10px;
   }
 
@@ -17,10 +43,16 @@
     position: relative;
     right: 20px;
 
-    img {
-      position: relative;
-      left: 40px;
-      z-index: 1000;
+    .options__box {
+      display: flex;
+      align-items: center;
+
+      @media only screen and (max-width: 500px) {
+        flex-direction: column;
+        align-items: flex-start;
+        width: auto;
+      }
+
     }
   }
 
@@ -37,19 +69,29 @@
 }
 
 .select {
-  width: 300px;
+  width: 297px;
   height: 64px;
-  font-weight: 200px;
+  font-size: 20px;
 
   &:focus {
     outline: none;
   }
 
-  > div {
+  @media only screen and (max-width: 500px) {
+    padding-left: 20px;
+    width: 450px;
+  }
+
+  >div {
     height: 100%;
     color: #ffffff;
     background-color: #343434;
-    border: 1px solid #707070;
+    border: 1px solid #707070 !important;
+    cursor: pointer !important;
+
+    @media only screen and (max-width: 500px) {
+      width: inherit;
+    }
 
     &:focus {
       outline: none;
@@ -60,22 +102,52 @@
     }
   }
 
-  > div > div {
+  >div:first-of-type>div {
     background-color: #343434;
     border-radius: 5px;
-    overflow-x: hidden;
+    margin-left: 50px;
+
+    @media only screen and (max-width: 500px) {
+      margin-left: 5px;
+    }
 
     &:focus {
       outline: none;
     }
 
-    > div {
+    >div {
       display: flex;
       align-items: center;
       font-weight: 300;
       color: white;
       background-color: #343434 !important;
+      position: relative;
+
+      svg {
+        position: relative;
+        color: white;
+      }
+
+      @media only screen and (max-width: 500px) {
+        left: 0;
+
+        svg {
+          right: 0 !important;
+        }
+      }
     }
+
+    >div:nth-child(2)>div>div {
+      margin-left: 5px;
+    }
+  }
+
+
+  >div:nth-child(4)>div>div {
+    left: 0;
+    cursor: pointer !important;
+    font-weight: 200;
+    background-color: #343434;
   }
 
   span {

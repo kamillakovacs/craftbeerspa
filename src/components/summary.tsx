@@ -1,53 +1,44 @@
-import { useFormikContext } from "formik";
 import React, { FC, memo } from "react";
+import { useFormikContext } from "formik";
+import { useTranslation } from "next-i18next";
 
 import { Reservation } from "../lib/validation/validationInterfaces";
 
+import detailsStyles from "../styles/details.module.scss";
 import styles from "../styles/main.module.scss";
 import summaryStyles from "../styles/summary.module.scss";
+import { currencyFormat } from "../lib/util/currencyFormat";
 
 const Summary: FC = () => {
-  const {
-    values,
-    touched,
-    setFieldValue,
-    setFieldTouched,
-  } = useFormikContext<Reservation>();
+  const { values } = useFormikContext<Reservation>();
+  const { t } = useTranslation("common");
 
   return (
     <>
       <div className={summaryStyles.label}>
         <div className={styles.cart} />
-        <label>Your Experience</label>
+        <label>{t("summary.youCanEnjoy")}</label>
       </div>
 
       <div className={summaryStyles.container}>
-        <div>- 15 minute pre-treatment in infra sauna</div>
-        <div>{`- 40 minute soak for ${
-          values.numberOfGuests ? values.numberOfGuests.value : 1
-        } ${
-          values.numberOfGuests
-            ? parseInt(values.numberOfGuests.value) > 1
-              ? "people"
-              : "person"
-            : "person"
-        } in ${values.numberOfTubs ? values.numberOfTubs.value : "1"} tub${
-          parseInt(values.numberOfTubs ? values.numberOfTubs.value : "1") > 1
-            ? "s"
-            : ""
-        } of beer bath`}</div>
-        <div>- 15 minute relaxation on straw bed</div>
-        <div>- Unlimited beer on tap throughout your stay</div>
-        <div>- Towels and bathrobes</div>
-        <div>
-          - Exclusive use of our beer spa facility (the whole spa is yours!)
-        </div>
-        <div className={summaryStyles.total}>
-          <div>
-            Total: <span className={summaryStyles.vat}>(incl.VAT)</span>
+        <ul className={detailsStyles.detailsUl}>
+          <li>{t("summary.exclusiveUse")}</li>
+          <li>{t("summary.bath")}</li>
+          <li>{t("summary.unlimitedBeer")}</li>
+          <li>{t("summary.infraredSauna")}</li>
+          <li>{t("summary.strawBed")}</li>
+          <li>{t("summary.snacks")}</li>
+          <li>{t("summary.towelsAndRobes")}</li>
+        </ul>
+
+        {values.price && (
+          <div className={summaryStyles.total}>
+            <div>
+              {t("summary.total")} <span className={summaryStyles.vat}>{t("summary.vat")} </span>
+            </div>
+            <div>{currencyFormat.format(parseFloat(values.price))}</div>
           </div>
-          <div>{`${values.price ? values.price : "18 000"} HUF`}</div>
-        </div>
+        )}
       </div>
     </>
   );

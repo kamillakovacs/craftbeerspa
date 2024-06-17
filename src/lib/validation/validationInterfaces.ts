@@ -1,22 +1,41 @@
+import { PaymentStatus } from "../../api/interfaces";
+import { CanceledBy, Communication } from "../interfaces";
+
 export interface Reservation {
   date: Date;
-  time: string;
-  numberOfGuests: { label: string; value: string };
-  numberOfTubs: { label: string; value: string };
+  numberOfGuests: { label: string; value: number };
+  numberOfTubs: { label: string; value: number };
   price: string;
- 
+  canceled: CanceledBy;
 }
 
 export interface ReservationWithDetails {
   date: Date;
-  time: string;
-  numberOfGuests: string;
-  numberOfTubs: string
+  dateOfPurchase?: Date;
+  numberOfGuests: { label: string; value: number };
+  numberOfTubs: { label: string; value: number };
   price: string;
   firstName: string;
   lastName: string;
   phoneNumber: string;
   email: string;
-  whereYouHeard?: { label: string; value: string };
+  address: string;
+  city: string;
+  country: { label: string; value: string };
+  postCode: string;
+  whereYouHeard: { label: string; value: string };
+  requirements: string;
+  termsAndConditions: boolean;
+  addToEmailList: boolean;
   paymentMethod: string;
+  paymentStatus?: PaymentStatus;
+  canceled: CanceledBy;
+  uncancelable: boolean;
+  communication: Communication;
+  reservationId?: number;
+  transactionId?: string;
+}
+
+export interface Reservations {
+  [key: string]: ReservationWithDetails;
 }

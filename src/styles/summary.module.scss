@@ -1,15 +1,21 @@
 .label {
   display: flex;
   align-items: center;
-  margin: 40px 0 10px 5px;
+  margin: 50px 0 20px 5px;
+  font-size: 22px;
 }
 
 .container {
-  width: 480px;
+  width: 630px;
   color: #bcbcbc;
   font-weight: 300;
-  margin: 0 0 10px 32px;
-  line-height: 30px;
+  margin: 0 0 20px 32px;
+  line-height: 40px;
+  font-size: 20px;
+
+  @media only screen and (max-width: 500px) {
+    width: 470px;
+  }
 }
 
 .bold {
@@ -24,6 +30,7 @@
   display: flex;
   justify-content: space-between;
   border-top: 1px solid;
-  margin-top: 15px;
+  margin-top: 20px;
+  padding-top: 10px;
   font-weight: 400;
 }

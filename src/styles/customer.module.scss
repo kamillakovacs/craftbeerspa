@@ -1,4 +1,6 @@
 .customer {
+  width: 700px;
+
   label {
     vertical-align: super;
     margin-left: 0;
@@ -12,69 +14,77 @@
     &Title {
       display: flex;
       align-items: center;
+      font-size: 22px;
+      margin-top: 20px;
     }
   }
 
   &__input {
-    width: 480px;
+    width: 650px;
     height: 64px;
     border: 1px solid #707070;
     border-radius: 4px;
-    font-size: 16px;
-    font-weight: 600;
-    padding-left: 10px;
+    font-size: 22px;
+    font-weight: 300;
+    padding-left: 20px;
     color: #ffffff;
     background-color: #343434;
-    margin: 10px 0 0 25px;
+    margin: 20px 0 0 25px;
+    font-family: Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif !important;
 
-    &:last-of-type {
-      margin-bottom: 10px;
+    &:focus-visible {
+      outline: none;
+    }
+
+    input {
+      background-color: inherit;
+      border: none;
+      font-weight: inherit;
+      font-size: inherit;
+      font-family: inherit;
+      color: white;
+      padding-left: 10px;
+
+      &:focus-visible {
+        outline: none;
+      }
+    }
+
+    &__error {
+      border-color: red;
+    }
+
+    @media only screen and (max-width: 500px) {
+      width: 450px;
     }
   }
 
   .select {
-    margin: 10px 0 10px 25px;
-    width: 480px;
-    height: 64px;
-    font-weight: 200px;
-
-    > div {
-      height: 100%;
-      color: #ffffff;
-      background-color: #343434;
-      border: 1px solid #707070;
-    }
-
     .css-1okebmr-indicatorSeparator {
       fill: #707070;
     }
 
-    > div > div {
-      background-color: #343434;
-      border-radius: 5px;
-      margin-left: 0;
-
+    >div>div {
       &:focus {
         outline: none;
       }
+    }
 
-      > div {
-        display: flex;
-        align-items: center;
-        font-weight: 300;
-        color: white;
-        background-color: #343434 !important;
-      }
+    >div:nth-child(4)>div>div {
+      background-color: transparent;
+      padding-left: 20px;
     }
 
     span {
-      background-color: #707070;
+      display: none;
+    }
+
+    @media only screen and (max-width: 500px) {
+      width: 450px;
     }
   }
 
-  .ErrorMessage {
-    text-align: right;
-    font-size: 12px;
-    color: red;
+  @media only screen and (max-width: 500px) {
+    width: 470px;
   }
 }

@@ -2,8 +2,7 @@ html,
 body {
   padding: 0;
   margin: 0;
-  font-family: Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans,
-    Helvetica Neue, sans-serif;
+  font-family: Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
 a {
@@ -15,90 +14,57 @@ a {
   box-sizing: border-box;
 }
 
-.DayPicker {
-  height: 354px;
-  font-family: Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans,
-    Helvetica Neue, sans-serif !important;
+.rdp {
+  font-family: Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif !important;
 
   &:focus {
     outline: none !important;
   }
 
-  &-wrapper {
-    padding: 20px !important;
-
-    &:focus {
-      outline: none !important;
-    }
+  &-nav_button,
+  &-nav_button:hover {
+    background-color: transparent !important;
   }
 
-  &-Caption {
+  &-caption {
     padding-left: 40px !important;
     height: 64px;
     margin-bottom: 0 !important;
-    & > div {
+
+    &_label {
       display: flex;
       align-items: center;
       height: 100%;
       font-weight: 200 !important;
+      font-size: 18px !important;
     }
   }
 
-  &-NavBar {
-    left: 20px;
-    position: relative;
+  &-button:focus {
+    border: none !important;
   }
 
-  &-NavButton {
-    background-size: 75% !important;
-    top: 22px !important;
-    outline: none;
-
-    &--prev {
-      background-image: url("/assets/previous.svg") !important;
-    }
-    &--next {
-      background-image: url("/assets/next.svg") !important;
-    }
+  &-head_cell {
+    font-weight: 400 !important;
   }
 
-  &-Weekday {
-    color: #ffffff !important;
-  }
-
-  &-Month {
-    height: 250px;
-    width: 290px;
-    margin: 0 !important;
-  }
-
-  &-Day {
+  &-day {
     outline: none;
 
     &:hover {
       background-color: inherit !important;
     }
-    &--today {
-      color: inherit !important;
-      font-weight: inherit !important;
-    }
-    &--selected {
+
+    &_selected {
       color: #222222 !important;
       background-color: #fcb923 !important;
 
+      span {
+        font-weight: 600;
+      }
+
       &:hover {
         background-color: #fcb923 !important;
-      }
-    }
-
-    &--disabled {
-      color: #707070 !important;
-      background-color: #343434 !important;
-
-      &:hover {
-        cursor: not-allowed;
-        color: #707070 !important;
-        background-color: inherit !important;
       }
     }
   }
@@ -122,6 +88,7 @@ a {
     height: 16px !important;
     margin-top: -7px !important;
   }
+
   &-mark {
     width: 4px !important;
     height: 4px !important;
@@ -168,7 +135,7 @@ a {
       padding: 0;
       padding: 10px;
       width: 100%;
-      color: #fdb924;
+      color: #fdb923;
     }
 
     &__panel {
@@ -207,14 +174,11 @@ a {
       }
     }
 
-    &--open
-      > .Accordion__indicator
-      .Accordion__indicator--contentItem--rotate
-      .Accordion__indicator--icon {
+    &--open>.Accordion__indicator .Accordion__indicator--contentItem--rotate .Accordion__indicator--icon {
       transform: rotate(-180deg);
     }
 
-    &--open > .Accordion__panel {
+    &--open>.Accordion__panel {
       max-height: 10000px;
       transition: max-height 0.8s ease;
       padding: 10px;

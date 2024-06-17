@@ -1,21 +1,18 @@
-.Header {
-  width: 100%;
-  height: 40px;
-  padding: 40px 10px;
-  margin-bottom: 15px;
+.header {
+  &__link {
+    color: white;
+    width: 650px;
 
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
+    a {
+      margin-right: 20px;
+      text-decoration: underline;
+    }
+  }
 
-  border-radius: 10px;
-  background-color: #fdb924;
-  color: #2f3135;
-  font-size: 50px;
-  font-weight: 400;
-
-  &__shareLogo {
-    height: 50px;
-    padding-right: 20px;
+  &__logo {
+    width: 250px;
+    height: 250px;
+    margin-bottom: 15px;
+    border-radius: 10px;
   }
 }
