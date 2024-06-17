@@ -32,14 +32,15 @@ const Main: FC<Props> = ({ currentReservations }) => {
 
   const initialValues = {
     date: null,
+    lengthOfTime: null,
     numberOfGuests: null,
     numberOfTubs: null,
-    price: "",
-    firstName: "",
-    lastName: "",
-    phoneNumber: "",
-    email: "",
-    paymentMethod: "",
+    price: null,
+    firstName: null,
+    lastName: null,
+    phoneNumber: null,
+    email: null,
+    paymentMethod: null,
     canceled: null
   };
 
@@ -52,6 +53,7 @@ const Main: FC<Props> = ({ currentReservations }) => {
     const reservationData: ReservationWithDetails = {
       date: values.date,
       dateOfPurchase: new Date(),
+      lengthOfTime: values.lengthOfTime,
       numberOfGuests: values.numberOfGuests,
       numberOfTubs: values.numberOfTubs,
       price: values.price,

@@ -14,6 +14,10 @@
   },
   "options": {
     "noOptions": "Please indicate number of guests",
+    "howManyMinutes": "How long would you like to stay?",
+    "selectTime": "Select time",
+    "seventy": "70 minutes",
+    "hundred": "1 hour 10 minutes",
     "numberOfPeopleAndTubs": "Number of People & Tubs",
     "selectGuests": "Select guests",
     "selectTubs": "Select tubs",

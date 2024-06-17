@@ -79,6 +79,11 @@ const Options: FC<Props> = ({ currentReservations }) => {
     }
   }, [values.numberOfTubs, values.numberOfGuests, setFieldValue, t]);
 
+  const lengthOfTimeOptions = [
+    { value: 70, label: t("options.seventy") },
+    { value: 100, label: t("options.hundred") }
+  ];
+
   const numberOfAvailableTubs = (): number => {
     if (!reservationsSelectedOnDateAndTime) {
       return 3;
@@ -155,8 +160,10 @@ const Options: FC<Props> = ({ currentReservations }) => {
     colorIconGreen(select.name);
   };
 
-  const colorIconGreen = (selector: string) =>
-    ((document.querySelector(`.${selector}`) as HTMLElement).style.fill = "#00d531");
+  const colorIconGreen = (selector: string) => {
+    console.log(selector);
+    return ((document.querySelector(`.${selector}`) as HTMLElement).style.fill = "#00d531");
+  };
 
   const resetIconColor = (selector: string) => ((document.querySelector(selector) as HTMLElement).style.fill = "white");
 
@@ -165,6 +172,34 @@ const Options: FC<Props> = ({ currentReservations }) => {
       <div className={optionStyles.options}>
         <div
           className={classNames(`${styles.todoitem} ${styles.todoitem__two}`, {
+            [styles.todoitem__done]: values.lengthOfTime && touched.lengthOfTime
+          })}
+        />
+        <div className={optionStyles.options__tubsLabel}>
+          <label>{t("options.howManyMinutes")}</label>
+        </div>
+      </div>
+
+      <div className={optionStyles.options__container}>
+        <div className={optionStyles.options__box}>
+          <div className={styles.iconContainer}>
+            <PeopleIcon className={classNames(`${optionStyles.options__icon} lengthOfTime`)} />
+          </div>
+          <Select
+            className={optionStyles.select}
+            options={lengthOfTimeOptions}
+            placeholder={<>{values.lengthOfTime ? values.lengthOfTime.label : t("options.selectTime")}</>}
+            name="lengthOfTime"
+            onChange={setOption}
+            value={values.lengthOfTime}
+            instanceId="length-of-time"
+            isSearchable={false}
+          />
+        </div>
+      </div>
+      <div className={optionStyles.options}>
+        <div
+          className={classNames(`${styles.todoitem} ${styles.todoitem__three}`, {
             [styles.todoitem__done]:
               values.numberOfGuests && values.numberOfTubs && touched.numberOfGuests && touched.numberOfTubs
           })}
@@ -261,7 +296,6 @@ const Options: FC<Props> = ({ currentReservations }) => {
                 paddingLeft: "10px"
               })
             }}
-            // className={optionStyles.select}
             options={getTubOptions()}
             placeholder={<>{values.numberOfTubs ? values.numberOfTubs.label : t("options.selectTubs")}</>}
             name="numberOfTubs"

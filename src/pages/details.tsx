@@ -42,6 +42,7 @@ const Details: FC<Props> = ({ customerAlreadyInDatabase }) => {
 
   const initialValues: ReservationWithDetails = {
     date: data.date,
+    lengthOfTime: data.lengthOfTime,
     numberOfGuests: data.numberOfGuests,
     numberOfTubs: data.numberOfTubs,
     price: data.price,
@@ -77,6 +78,7 @@ const Details: FC<Props> = ({ customerAlreadyInDatabase }) => {
     const reservationData: ReservationWithDetails = {
       date: values.date,
       dateOfPurchase: new Date(),
+      lengthOfTime: values.lengthOfTime,
       numberOfGuests: values.numberOfGuests,
       numberOfTubs: values.numberOfTubs,
       price: values.price,

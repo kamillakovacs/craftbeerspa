@@ -3,6 +3,7 @@ import { CanceledBy, Communication } from "../interfaces";
 
 export interface Reservation {
   date: Date;
+  lengthOfTime: { label: string; value: number };
   numberOfGuests: { label: string; value: number };
   numberOfTubs: { label: string; value: number };
   price: string;
@@ -12,6 +13,7 @@ export interface Reservation {
 export interface ReservationWithDetails {
   date: Date;
   dateOfPurchase?: Date;
+  lengthOfTime: { label: string; value: number };
   numberOfGuests: { label: string; value: number };
   numberOfTubs: { label: string; value: number };
   price: string;

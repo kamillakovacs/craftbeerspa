@@ -36,6 +36,22 @@ const ReservationSummary: FC<Props> = ({ reservation, date, price, paymentStatus
     }
   }, [setResDate, date, setResPrice, price, paymentStatus, i18n.language]);
 
+  const getTubsAndGuests = (numberOfGuestsValue: number) => {
+    switch (numberOfGuestsValue) {
+      case 1:
+
+      case 2:
+
+      case 3:
+
+      case 4:
+
+      case 5:
+
+      case 6:
+    }
+  };
+
   return (
     <div className={detailsStyles.details}>
       <div className={detailsStyles.details__row}>
@@ -55,11 +71,11 @@ const ReservationSummary: FC<Props> = ({ reservation, date, price, paymentStatus
       </div>
       <div className={detailsStyles.details__row}>
         <div className={detailsStyles.details__rowLabel}>{t("reservationDetails.lengthOfStay")}</div>
-        <div>{t("reservationDetails.hourAndFifteenMins")}</div>
+        <div>{reservation.lengthOfTime?.value === 70 ? t("options.seventy") : t("options.hundred")}</div>
       </div>
       {!paymentStatus && (
         <div className={detailsStyles.details__row}>
-          <div>{t("reservationDetails.totalPrice")}:</div>
+          <div>{t("reservationDetails.totalPrice")}</div>
           <div>{resPrice}</div>
         </div>
       )}
