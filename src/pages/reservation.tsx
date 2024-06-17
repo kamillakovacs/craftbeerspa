@@ -85,7 +85,7 @@ export async function getServerSideProps({ query, locale }) {
 
   const customerAlreadyInDatabase =
     Object.values(users).filter((user) => {
-      if (user.firstName) {
+      if (user?.firstName) {
         return (
           user.firstName.toLowerCase() === reservation.firstName.toLowerCase() &&
           user.lastName.toLowerCase() === reservation.lastName.toLowerCase() &&
