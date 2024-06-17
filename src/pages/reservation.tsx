@@ -37,18 +37,21 @@ const ReservationPage: FC<Props> = ({ reservation, paymentId, customerAlreadyInD
         .then((res) => res.data.documentId)
         .catch((e) => console.error(e));
 
-    const createAndSendConfirmationEmail = async (reservationId: number) =>
-      await axios
-        .post("/api/email", {
-          localizedDate,
-          reservation,
-          paymentId,
-          reservationId,
-          language: i18n.language,
-          action: Action.None
-        })
-        .then((res) => res.data)
-        .catch((e) => console.error(e));
+    const createAndSendConfirmationEmail = async (reservationId: number) => {
+      if (reservationId) {
+        await axios
+          .post("/api/email", {
+            localizedDate,
+            reservation,
+            paymentId,
+            reservationId,
+            language: i18n.language,
+            action: Action.None
+          })
+          .then((res) => res.data)
+          .catch((e) => console.error(e));
+      }
+    };
 
     if (reservation?.paymentStatus === PaymentStatus.Succeeded && !reservation?.communication.receiptSent) {
       createAndSendReceipt().then((reservationId: number) => createAndSendConfirmationEmail(reservationId));
