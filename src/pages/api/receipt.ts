@@ -85,7 +85,7 @@ const getCreatePartnerBody = (reservation: ReservationWithDetails) => {
   const { firstName, lastName, address, city, country, postCode, email, phoneNumber } = reservation;
 
   return {
-    name: `${lastName} ${firstName}`,
+    name: `${firstName} ${lastName}`,
     address: {
       country_code: country.value,
       post_code: postCode,
