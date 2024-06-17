@@ -30,14 +30,12 @@ const createPartnerThenDocument = async (reservation, paymentId, headers, reserv
     })
     .catch((e) => console.error("Error creating new partner", e));
 
-const getExistingPartner = (reservation: ReservationWithDetails, partners: any[]) => {
-  console.log(partners);
-  return partners.filter(
+const getExistingPartner = (reservation: ReservationWithDetails, partners: any[]) =>
+  partners.filter(
     (partner) =>
       partner.address.address === reservation.address &&
       partner.name === reservation.firstName + " " + reservation.lastName
   );
-};
 
 const createDocument = async (
   reservation: ReservationWithDetails,
