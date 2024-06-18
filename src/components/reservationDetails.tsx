@@ -29,7 +29,7 @@ const ReservationDetails: FC<Props> = ({ reservation, currentReservations }) => 
   useEffect(() => {
     if (reservation?.dateOfPurchase) {
       setDateOfPurchase(
-        new Intl.DateTimeFormat(i18n.language, {
+        new Intl.DateTimeFormat(reservation.locale, {
           month: "long",
           day: "numeric",
           year: "numeric",
@@ -42,7 +42,7 @@ const ReservationDetails: FC<Props> = ({ reservation, currentReservations }) => 
     if (reservation?.price) {
       setPrice(currencyFormat.format(parseFloat(reservation?.price)));
     }
-  }, [reservation?.dateOfPurchase, setDateOfPurchase, reservation?.price, setPrice, i18n.language]);
+  }, [reservation?.dateOfPurchase, setDateOfPurchase, reservation?.price, setPrice, reservation.locale]);
 
   return (
     <article className={thanksStyles.container}>

@@ -21,7 +21,7 @@ const ReservationSummary: FC<Props> = ({ reservation, date, price, paymentStatus
   useEffect(() => {
     if (date) {
       setResDate(
-        new Intl.DateTimeFormat(i18n.language, {
+        new Intl.DateTimeFormat(reservation.locale, {
           month: "long",
           day: "numeric",
           year: "numeric",
@@ -34,7 +34,7 @@ const ReservationSummary: FC<Props> = ({ reservation, date, price, paymentStatus
     if (price && !paymentStatus) {
       setResPrice(currencyFormat.format(parseFloat(price)));
     }
-  }, [setResDate, date, setResPrice, price, paymentStatus, i18n.language]);
+  }, [setResDate, date, setResPrice, price, paymentStatus, reservation.locale]);
 
   return (
     <div className={detailsStyles.details}>

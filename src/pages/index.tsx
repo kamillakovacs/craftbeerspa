@@ -4,7 +4,7 @@ import classnames from "classnames";
 import { Formik } from "formik";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useRouter } from "next/router";
-import { useTranslation } from "next-i18next";
+import { i18n, useTranslation } from "next-i18next";
 
 import firebase from "../lib/firebase";
 import { PaymentStatus } from "../api/interfaces";
@@ -62,6 +62,7 @@ const Main: FC<Props> = ({ currentReservations }) => {
       address: null,
       city: null,
       country: null,
+      locale: i18n.language,
       postCode: null,
       whereYouHeard: { value: "", label: "" },
       paymentStatus: null,

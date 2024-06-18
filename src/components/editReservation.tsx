@@ -108,7 +108,7 @@ const EditReservation: FC<Props> = ({ reservation, currentReservations }) => {
   const onSubmit = async (values: Reservation) => {
     setDate(values.date);
 
-    const localizedDate = new Intl.DateTimeFormat(i18n.language, {
+    const localizedDate = new Intl.DateTimeFormat(reservation.locale, {
       month: "2-digit",
       day: "2-digit",
       year: "numeric",
@@ -122,7 +122,7 @@ const EditReservation: FC<Props> = ({ reservation, currentReservations }) => {
         reservation,
         paymentId,
         reservationId: reservation.reservationId,
-        language: i18n.language,
+        language: reservation.locale,
         action: Action.Change
       })
       .then((res) => res.data)
