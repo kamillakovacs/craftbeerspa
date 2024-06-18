@@ -62,7 +62,7 @@ const Main: FC<Props> = ({ currentReservations }) => {
       address: null,
       city: null,
       country: null,
-      locale: i18n.language,
+      language: i18n.language,
       postCode: null,
       whereYouHeard: { value: "", label: "" },
       paymentStatus: null,

@@ -22,7 +22,7 @@ export interface ReservationWithDetails {
   address: string;
   city: string;
   country: { label: string; value: string };
-  locale: string;
+  language: string;
   postCode: string;
   whereYouHeard: { label: string; value: string };
   requirements: string;

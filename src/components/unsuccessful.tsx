@@ -37,6 +37,7 @@ const Unsuccessful: FC<Props> = ({ customerAlreadyInDatabase, reservation }) => 
       address: reservation.address,
       city: reservation.city,
       country: reservation.country,
+      language: reservation.language,
       postCode: reservation.postCode,
       whereYouHeard: reservation.whereYouHeard ? reservation.whereYouHeard : null,
       paymentStatus: null,

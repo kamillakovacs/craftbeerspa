@@ -23,7 +23,7 @@ const ReservationPage: FC<Props> = ({ reservation, paymentId, customerAlreadyInD
   const { i18n } = useTranslation("common");
 
   useEffect(() => {
-    const localizedDate = new Intl.DateTimeFormat(reservation.locale, {
+    const localizedDate = new Intl.DateTimeFormat(reservation.language, {
       month: "long",
       day: "numeric",
       year: "numeric",
@@ -45,7 +45,7 @@ const ReservationPage: FC<Props> = ({ reservation, paymentId, customerAlreadyInD
             reservation,
             paymentId,
             reservationId,
-            language: reservation.locale,
+            language: reservation.language,
             action: Action.None
           })
           .then((res) => res.data)
@@ -56,7 +56,7 @@ const ReservationPage: FC<Props> = ({ reservation, paymentId, customerAlreadyInD
     if (reservation?.paymentStatus === PaymentStatus.Succeeded && !reservation?.communication.receiptSent) {
       createAndSendReceipt().then((reservationId: number) => createAndSendConfirmationEmail(reservationId));
     }
-  }, [reservation, paymentId, reservation.locale]);
+  }, [reservation, paymentId, reservation.language]);
 
   return (
     <>
