@@ -35,3 +35,8 @@ export enum CanceledBy {
   BeerSpa = "beerspa",
   PhoneCall = "phonecall"
 }
+
+export interface AdminUser {
+  id: string;
+  password: string;
+}

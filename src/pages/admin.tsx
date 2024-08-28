@@ -4,7 +4,6 @@ import React, { FC, memo, useEffect } from "react";
 import classnames from "classnames";
 import { Field, Formik } from "formik";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import Image from "next/image";
 import { useRouter } from "next/router";
 import { Trans, useTranslation } from "next-i18next";
 
@@ -13,31 +12,27 @@ import * as payment from "../api/paymentRequest";
 import firebase from "../lib/firebase";
 import { ReservationWithDetails } from "../lib/validation/validationInterfaces";
 import { details } from "../lib/validation/validationSchemas";
-import { User } from "../lib/interfaces";
+import { ReservationDataShort, User } from "../lib/interfaces";
 
 import Customer from "../components/customer";
 import ReservationSummary from "../components/reservationSummary";
 
 import reservationStyles from "../styles/reservation.module.scss";
-import barion from "../../public/assets/barion-card-strip-intl__medium.png";
 import styles from "../styles/main.module.scss";
-import detailsStyles from "../styles/details.module.scss";
 import customerStyles from "../styles/customer.module.scss";
+import Options from "../components/options";
+import ReservationDate from "../components/reservationDate";
+import { PaymentStatus } from "../api/interfaces";
 
 interface Props {
   customerAlreadyInDatabase: boolean;
+  currentReservations: ReservationDataShort[];
 }
 
-const Details: FC<Props> = ({ customerAlreadyInDatabase }) => {
+const Details: FC<Props> = ({ currentReservations }) => {
   const router = useRouter();
   const [data] = useAppContext();
   const { t } = useTranslation("common");
-
-  useEffect(() => {
-    if (!data.numberOfGuests) {
-      router.replace("/");
-    }
-  });
 
   const initialValues: ReservationWithDetails = {
     date: data.date,
@@ -122,12 +117,12 @@ const Details: FC<Props> = ({ customerAlreadyInDatabase }) => {
         >
           {({ dirty, errors, values, handleSubmit }) => (
             <form onSubmit={handleSubmit}>
+              <section className={reservationStyles.reservation}>
+                <ReservationDate currentReservations={currentReservations} />
+                <Options currentReservations={currentReservations} />
+              </section>
               <section className={customerStyles.customer}>
                 <Customer />
-                <div className={detailsStyles.details__detailTitle}>
-                  <div className={`${styles.todoitem} ${styles.todoitem__cashier}`} />
-                  <label>{t("reservationDetails.summaryAndCheckout")}</label>
-                </div>
                 <ReservationSummary
                   reservation={values}
                   date={data.date}
@@ -135,22 +130,6 @@ const Details: FC<Props> = ({ customerAlreadyInDatabase }) => {
                   paymentStatus={values.paymentStatus}
                 />
                 <div className={reservationStyles.reservation__barion__container}>
-                  <div
-                    className={classNames(reservationStyles.reservation__checkbox, {
-                      [reservationStyles.reservation__checkbox__error]: errors.termsAndConditions
-                    })}
-                  >
-                    <label>
-                      <Field type="checkbox" name="termsAndConditions" />
-                      <Trans i18nKey="details.iAccept">
-                        <a
-                          href="https://craftbeerspa.hu/wp-content/uploads/2024/05/craftbeerspa-szolgaltatasi-felhasznalasi-feltetelek.pdf"
-                          target="_blank"
-                          rel="noreferrer"
-                        />
-                      </Trans>
-                    </label>
-                  </div>
                   <div className={reservationStyles.reservation__checkbox}>
                     <label>
                       <Field type="checkbox" name="newsletter" />
@@ -178,10 +157,6 @@ const Details: FC<Props> = ({ customerAlreadyInDatabase }) => {
                       {t("details.finishAndPay")}
                     </button>
                   </div>
-                  <div className={reservationStyles.reservation__checkbox}>
-                    <p>{t("details.business")}</p>
-                  </div>
-                  <Image src={barion} alt="barion-logo" />
                 </div>
               </section>
             </form>
@@ -193,26 +168,31 @@ const Details: FC<Props> = ({ customerAlreadyInDatabase }) => {
 };
 
 export async function getServerSideProps({ locale }) {
-  const customers = firebase.database().ref("customers");
-  const users: User[] = await customers.once("value").then(function (snapshot) {
-    return snapshot.val() || "Anonymous";
-  });
-
-  const customerAlreadyInDatabase = Object.values(users).filter((user) => {
-    if (user.firstName) {
+  const reservations = firebase.database().ref("reservations");
+  const currentReservations: ReservationDataShort[] = await reservations?.once("value").then(function (snapshot) {
+    if (snapshot.val()) {
       return (
-        user.firstName.toLowerCase() === user.firstName.toLowerCase() &&
-        user.lastName.toLowerCase() === user.lastName.toLowerCase() &&
-        user.phoneNumber.toLowerCase() === user.phoneNumber.toLowerCase() &&
-        user.email.toLowerCase() === user.email.toLowerCase()
+        Object.values(snapshot.val())
+          .filter(
+            (res: ReservationWithDetails) =>
+              res.paymentStatus === PaymentStatus.Succeeded && new Date(res.date) > new Date()
+          )
+          .map((res: ReservationWithDetails) => ({
+            date: res.date ?? null,
+            numberOfGuests: res.numberOfGuests ?? null,
+            numberOfTubs: res.numberOfTubs ?? null,
+            canceled: res.canceled ?? null
+          })) || []
       );
+    } else {
+      return null;
     }
-  }).length;
+  });
 
   return {
     props: {
       ...(await serverSideTranslations(locale, ["common"])),
-      customerAlreadyInDatabase
+      currentReservations
     }
   };
 }
