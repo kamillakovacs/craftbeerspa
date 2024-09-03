@@ -1,18 +1,17 @@
 import classNames from "classnames";
 import "firebase/database";
 import React, { FC, memo, useEffect } from "react";
-import classnames from "classnames";
 import { Field, Formik } from "formik";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useRouter } from "next/router";
-import { Trans, useTranslation } from "next-i18next";
+import { useTranslation } from "next-i18next";
 
 import { useAppContext } from "../../context/appContext";
-import * as payment from "../api/paymentRequest";
 import firebase from "../lib/firebase";
+import firebaseadmin from "../lib/firebaseadmin";
 import { ReservationWithDetails } from "../lib/validation/validationInterfaces";
 import { details } from "../lib/validation/validationSchemas";
-import { ReservationDataShort, User } from "../lib/interfaces";
+import { AdminUser, ReservationDataShort, User } from "../lib/interfaces";
 
 import Customer from "../components/customer";
 import ReservationSummary from "../components/reservationSummary";
@@ -29,16 +28,22 @@ interface Props {
   currentReservations: ReservationDataShort[];
 }
 
-const Details: FC<Props> = ({ currentReservations }) => {
+const Details: FC<Props> = ({ customerAlreadyInDatabase, currentReservations }) => {
   const router = useRouter();
   const [data] = useAppContext();
   const { t } = useTranslation("common");
 
+  useEffect(() => {
+    if (document.cookie.indexOf("session") === -1) {
+      router.replace("/login");
+    }
+  });
+
   const initialValues: ReservationWithDetails = {
-    date: data.date,
-    numberOfGuests: data.numberOfGuests,
-    numberOfTubs: data.numberOfTubs,
-    price: data.price,
+    date: null,
+    numberOfGuests: null,
+    numberOfTubs: null,
+    price: "",
     firstName: null,
     lastName: null,
     phoneNumber: null,
@@ -64,8 +69,7 @@ const Details: FC<Props> = ({ currentReservations }) => {
 
   const goBack = () => router.replace("/");
 
-  const redirectToStartPayment = async (reservationData: ReservationWithDetails) =>
-    payment.useSendPaymentRequest(reservationData, customerAlreadyInDatabase, router);
+  const redirectToStartPayment = async (reservationData: ReservationWithDetails) => router.replace("/");
 
   const onSubmit = async (values: ReservationWithDetails) => {
     const reservationData: ReservationWithDetails = {
@@ -83,7 +87,7 @@ const Details: FC<Props> = ({ currentReservations }) => {
       country: values.country,
       postCode: values.postCode,
       whereYouHeard: values.whereYouHeard,
-      paymentStatus: null,
+      paymentStatus: PaymentStatus.Succeeded,
       paymentMethod: values.paymentMethod,
       canceled: null,
       uncancelable: false,
@@ -93,7 +97,7 @@ const Details: FC<Props> = ({ currentReservations }) => {
         rescheduleEmailSentCount: 0,
         cancelationEmailSent: false
       },
-      requirements: null,
+      requirements: values.requirements,
       termsAndConditions: values.termsAndConditions,
       addToEmailList: values.addToEmailList
     };
@@ -189,9 +193,26 @@ export async function getServerSideProps({ locale }) {
     }
   });
 
+  const customers = firebase.database().ref("customers");
+  const users: User[] = await customers.once("value").then(function (snapshot) {
+    return snapshot.val() || "Anonymous";
+  });
+
+  const customerAlreadyInDatabase = Object.values(users).filter((user) => {
+    if (user.firstName) {
+      return (
+        user.firstName.toLowerCase() === user.firstName.toLowerCase() &&
+        user.lastName.toLowerCase() === user.lastName.toLowerCase() &&
+        user.phoneNumber.toLowerCase() === user.phoneNumber.toLowerCase() &&
+        user.email.toLowerCase() === user.email.toLowerCase()
+      );
+    }
+  }).length;
+
   return {
     props: {
       ...(await serverSideTranslations(locale, ["common"])),
+      customerAlreadyInDatabase,
       currentReservations
     }
   };

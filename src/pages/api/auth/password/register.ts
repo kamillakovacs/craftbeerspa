@@ -25,8 +25,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return null;
     }
   });
-  console.log(existingUser);
-  if (existingUser.length) {
+
+  if (existingUser?.length) {
     return res.status(400).json({ message: "User already exists" });
   }
   const hashedPassword = bcrypt.hashSync(password, 10);

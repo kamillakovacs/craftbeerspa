@@ -2,7 +2,7 @@
 import { useState, FormEvent, useEffect } from "react";
 interface AuthFormProps {
   mode: "Signup" | "Login";
-  onSubmit: (data: { email: string; password: string }) => void;
+  onSubmit: (data: { id: string; password: string }) => void;
   resetForm?: boolean;
 }
 const AuthForm: React.FC<AuthFormProps> = ({ mode, onSubmit, resetForm }) => {
