@@ -11,13 +11,12 @@ import Calendar from "./calendar";
 import dateStyles from "../styles/reservationDate.module.scss";
 import styles from "../styles/main.module.scss";
 
-
 interface Props {
   currentReservations: ReservationDataShort[];
+  blocked: { dates: Object; times: Object };
 }
 
-
-const ReservationDate: FC<Props> = ({ currentReservations }) => {
+const ReservationDate: FC<Props> = ({ currentReservations, blocked }) => {
   const { values } = useFormikContext<Reservation>();
   const { t } = useTranslation("common");
 
@@ -32,7 +31,7 @@ const ReservationDate: FC<Props> = ({ currentReservations }) => {
 
         <label>{t("reservationDate.dateAndTime")}</label>
       </div>
-      <Calendar currentReservations={currentReservations} />
+      <Calendar currentReservations={currentReservations} blocked={blocked} />
     </section>
   );
 };

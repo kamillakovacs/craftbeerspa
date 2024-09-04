@@ -17,11 +17,12 @@ import dateStyles from "../styles/reservationDate.module.scss";
 interface Props {
   currentReservations: ReservationDataShort[];
   isExistingReservation?: boolean;
+  blocked: { dates: Object; times: Object };
 }
 
 const timeOptions = ["10:00", "12:00", "14:00", "16:00", "18:00", "20:00"];
 
-const Calendar: FC<Props> = ({ currentReservations, isExistingReservation }) => {
+const Calendar: FC<Props> = ({ currentReservations, isExistingReservation, blocked }) => {
   const { values, setFieldValue } = useFormikContext<Reservation>();
   const { t, i18n } = useTranslation();
 
@@ -80,12 +81,22 @@ const Calendar: FC<Props> = ({ currentReservations, isExistingReservation }) => 
 
   const resetIconColor = (selector: string) => ((document.querySelector(selector) as HTMLElement).style.fill = "white");
 
-  const allTubsAreReservedForGivenEntireDay = (day: Date) => {
+  const allTubsAreReservedForGivenEntireDay = (date: Date): boolean => {
     if (!currentReservations) {
       return false;
     }
 
-    const hoursReservedOnGivenDay = getReservationsOnDate(day).map((res: ReservationDataShort) =>
+    const month = date.getUTCMonth() + 1; // months from 1-12
+    const day = date.getUTCDate() + 1;
+    const year = date.getUTCFullYear();
+
+    const blockedDates = blocked?.dates?.[year]?.[month]?.[day];
+
+    if (blockedDates) {
+      return true;
+    }
+
+    const hoursReservedOnGivenDay = getReservationsOnDate(date).map((res: ReservationDataShort) =>
       new Date(res.date).getHours()
     );
     const timesReservedOnDay: number[] = hoursReservedOnGivenDay.filter(
@@ -98,7 +109,7 @@ const Calendar: FC<Props> = ({ currentReservations, isExistingReservation }) => 
     if (!allTimesAreReservedOnGivenDay) {
       return false;
     }
-    return getReservationsOnDate(day).length > 0;
+    return getReservationsOnDate(date).length > 0;
   };
 
   const getReservationsOnDate = (day: Date) =>

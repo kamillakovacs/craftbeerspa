@@ -23,9 +23,10 @@ import Header from "../components/header";
 
 interface Props {
   currentReservations: ReservationDataShort[];
+  blocked: { dates: Object; times: Object };
 }
 
-const Main: FC<Props> = ({ currentReservations }) => {
+const Main: FC<Props> = ({ currentReservations, blocked }) => {
   const router = useRouter();
   const [_data, setData] = useAppContext();
   const { t } = useTranslation("common");
@@ -101,7 +102,7 @@ const Main: FC<Props> = ({ currentReservations }) => {
             return (
               <form onSubmit={handleSubmit}>
                 <section className={reservationStyles.reservation}>
-                  <ReservationDate currentReservations={currentReservations} />
+                  <ReservationDate currentReservations={currentReservations} blocked={blocked} />
                   <Options currentReservations={currentReservations} />
                   <Summary />
                   <button
@@ -127,6 +128,7 @@ const Main: FC<Props> = ({ currentReservations }) => {
 
 export async function getServerSideProps({ locale }) {
   const reservations = firebase.database().ref("reservations");
+  const blockedDb = firebase.database().ref("blocked");
   const currentReservations: ReservationDataShort[] = await reservations?.once("value").then(function (snapshot) {
     if (snapshot.val()) {
       return (
@@ -147,10 +149,25 @@ export async function getServerSideProps({ locale }) {
     }
   });
 
+  const blocked: { dates: Object; times: Object } = await blockedDb?.once("value").then(function (snapshot) {
+    console.log("snapshot", snapshot.val());
+    if (snapshot.val()) {
+      return {
+        dates: snapshot.val().dates ?? null,
+        times: snapshot.val().times ?? null
+      };
+    } else {
+      return null;
+    }
+  });
+
+  console.log("blocked", blocked);
+
   return {
     props: {
       ...(await serverSideTranslations(locale, ["common"])),
-      currentReservations
+      currentReservations,
+      blocked
     }
   };
 }
