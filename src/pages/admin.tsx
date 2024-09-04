@@ -1,4 +1,4 @@
-import classNames from "classnames";
+import classnames from "classnames";
 import "firebase/database";
 import React, { FC, memo, useEffect } from "react";
 import { Field, Formik } from "formik";
@@ -26,9 +26,10 @@ import { PaymentStatus } from "../api/interfaces";
 interface Props {
   customerAlreadyInDatabase: boolean;
   currentReservations: ReservationDataShort[];
+  blocked: { dates: Object; times: Object };
 }
 
-const Details: FC<Props> = ({ customerAlreadyInDatabase, currentReservations }) => {
+const Details: FC<Props> = ({ customerAlreadyInDatabase, currentReservations, blocked }) => {
   const router = useRouter();
   const [data] = useAppContext();
   const { t } = useTranslation("common");
@@ -37,7 +38,7 @@ const Details: FC<Props> = ({ customerAlreadyInDatabase, currentReservations }) 
     if (document.cookie.indexOf("session") === -1) {
       router.replace("/login");
     }
-  });
+  }, []);
 
   const initialValues: ReservationWithDetails = {
     date: null,
@@ -122,7 +123,7 @@ const Details: FC<Props> = ({ customerAlreadyInDatabase, currentReservations }) 
           {({ dirty, errors, values, handleSubmit }) => (
             <form onSubmit={handleSubmit}>
               <section className={reservationStyles.reservation}>
-                <ReservationDate currentReservations={currentReservations} />
+                <ReservationDate currentReservations={currentReservations} blocked={blocked} />
                 <Options currentReservations={currentReservations} />
               </section>
               <section className={customerStyles.customer}>
@@ -173,6 +174,9 @@ const Details: FC<Props> = ({ customerAlreadyInDatabase, currentReservations }) 
 
 export async function getServerSideProps({ locale }) {
   const reservations = firebase.database().ref("reservations");
+  const blockedDb = firebase.database().ref("blocked");
+  const customers = firebase.database().ref("customers");
+
   const currentReservations: ReservationDataShort[] = await reservations?.once("value").then(function (snapshot) {
     if (snapshot.val()) {
       return (
@@ -193,7 +197,17 @@ export async function getServerSideProps({ locale }) {
     }
   });
 
-  const customers = firebase.database().ref("customers");
+  const blocked: { dates: Object; times: Object } = await blockedDb?.once("value").then(function (snapshot) {
+    if (snapshot.val()) {
+      return {
+        dates: snapshot.val().dates ?? null,
+        times: snapshot.val().times ?? null
+      };
+    } else {
+      return null;
+    }
+  });
+
   const users: User[] = await customers.once("value").then(function (snapshot) {
     return snapshot.val() || "Anonymous";
   });
@@ -213,7 +227,8 @@ export async function getServerSideProps({ locale }) {
     props: {
       ...(await serverSideTranslations(locale, ["common"])),
       customerAlreadyInDatabase,
-      currentReservations
+      currentReservations,
+      blocked
     }
   };
 }

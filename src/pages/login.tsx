@@ -1,19 +1,12 @@
 "use client";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import AuthForm from "../components/authform";
-import router from "next/router";
+import { Router } from "next/router";
 const Signup: React.FC = () => {
   const [message, setMessage] = useState("");
   const [isSuccessful, setIsSuccessful] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const handleLogin = async (data: { id: string; password: string }) => {
-    useEffect(() => {
-      if (isLoggedIn) {
-        router.push("/admin");
-      }
-    }, [isLoggedIn]);
-
     const res = await fetch("/api/auth/password/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -23,11 +16,8 @@ const Signup: React.FC = () => {
     const result = await res.json();
     setMessage(result.message);
 
-    if (res.status === 201) {
+    if (res.status === 200) {
       setIsSuccessful(true);
-      setIsLoggedIn(true);
-    } else {
-      setIsLoggedIn(false);
     }
   };
 
@@ -39,11 +29,9 @@ const Signup: React.FC = () => {
             <p className="text-green-500 text-center text-lg font-semibold">Welcome!</p>
           </>
         ) : (
-          <AuthForm mode="Signup" onSubmit={handleLogin} />
+          <AuthForm mode="Login" onSubmit={handleLogin} />
         )}
-        {message && (
-          <p className={`text-center mt-4 ${setIsLoggedIn ? "text-green-500" : "text-red-500"}`}>{message}</p>
-        )}
+        {message && <p className={`text-center mt-4 `}>{message}</p>}
       </div>
     </div>
   );

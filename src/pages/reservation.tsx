@@ -17,9 +17,16 @@ interface Props {
   paymentId: string;
   customerAlreadyInDatabase: boolean;
   currentReservations: ReservationDataShort[];
+  blocked: { dates: Object; times: Object };
 }
 
-const ReservationPage: FC<Props> = ({ reservation, paymentId, customerAlreadyInDatabase, currentReservations }) => {
+const ReservationPage: FC<Props> = ({
+  reservation,
+  paymentId,
+  customerAlreadyInDatabase,
+  currentReservations,
+  blocked
+}) => {
   const { i18n } = useTranslation("common");
 
   useEffect(() => {
@@ -63,7 +70,7 @@ const ReservationPage: FC<Props> = ({ reservation, paymentId, customerAlreadyInD
       <div id="modal-root"></div>
       <article className={thanksStyles.container}>
         {reservation?.paymentStatus === PaymentStatus.Succeeded ? (
-          <ReservationDetails reservation={reservation} currentReservations={currentReservations} />
+          <ReservationDetails reservation={reservation} currentReservations={currentReservations} blocked={blocked} />
         ) : (
           <Unsuccessful reservation={reservation} customerAlreadyInDatabase={customerAlreadyInDatabase} />
         )}
@@ -75,6 +82,7 @@ const ReservationPage: FC<Props> = ({ reservation, paymentId, customerAlreadyInD
 export async function getServerSideProps({ query, locale }) {
   const res = firebase.database().ref("reservations");
   const customers = firebase.database().ref("customers");
+  const blockedDb = firebase.database().ref("blocked");
 
   const reservations = await res.once("value").then(function (snapshot) {
     return snapshot.val() || "Anonymous";
@@ -112,6 +120,17 @@ export async function getServerSideProps({ query, locale }) {
           canceled: res.canceled ?? null
         })) || []
     );
+  });
+
+  const blocked: { dates: Object; times: Object } = await blockedDb?.once("value").then(function (snapshot) {
+    if (snapshot.val()) {
+      return {
+        dates: snapshot.val().dates ?? null,
+        times: snapshot.val().times ?? null
+      };
+    } else {
+      return null;
+    }
   });
 
   return {

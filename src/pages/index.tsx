@@ -150,7 +150,6 @@ export async function getServerSideProps({ locale }) {
   });
 
   const blocked: { dates: Object; times: Object } = await blockedDb?.once("value").then(function (snapshot) {
-    console.log("snapshot", snapshot.val());
     if (snapshot.val()) {
       return {
         dates: snapshot.val().dates ?? null,
@@ -160,8 +159,6 @@ export async function getServerSideProps({ locale }) {
       return null;
     }
   });
-
-  console.log("blocked", blocked);
 
   return {
     props: {

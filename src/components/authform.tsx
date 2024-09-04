@@ -1,5 +1,5 @@
 "use client";
-import { useState, FormEvent, useEffect } from "react";
+import React, { useState, FormEvent, useEffect } from "react";
 interface AuthFormProps {
   mode: "Signup" | "Login";
   onSubmit: (data: { id: string; password: string }) => void;

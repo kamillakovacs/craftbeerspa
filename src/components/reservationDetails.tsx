@@ -11,7 +11,7 @@ import ReservationSummary from "./reservationSummary";
 import { PaymentStatus } from "../api/interfaces";
 import EditReservation from "./editReservation";
 
-import { CanceledBy, ReservationDataShort } from "../lib/interfaces";
+import { ReservationDataShort } from "../lib/interfaces";
 import { ReservationWithDetails } from "../lib/validation/validationInterfaces";
 
 import { currencyFormat } from "../lib/util/currencyFormat";
@@ -19,9 +19,10 @@ import { currencyFormat } from "../lib/util/currencyFormat";
 interface Props {
   reservation: ReservationWithDetails;
   currentReservations: ReservationDataShort[];
+  blocked: { dates: Object; times: Object };
 }
 
-const ReservationDetails: FC<Props> = ({ reservation, currentReservations }) => {
+const ReservationDetails: FC<Props> = ({ reservation, currentReservations, blocked }) => {
   const { t, i18n } = useTranslation("common");
   const [dateOfPurchase, setDateOfPurchase] = useState("");
   const [price, setPrice] = useState("");
@@ -138,7 +139,9 @@ const ReservationDetails: FC<Props> = ({ reservation, currentReservations }) => 
           </div>
         </div>
       </div>
-      {!reservation.canceled && <EditReservation reservation={reservation} currentReservations={currentReservations} />}
+      {!reservation.canceled && (
+        <EditReservation reservation={reservation} currentReservations={currentReservations} blocked={blocked} />
+      )}
     </article>
   );
 };

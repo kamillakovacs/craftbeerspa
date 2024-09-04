@@ -21,9 +21,10 @@ import { PaymentStatus } from "../api/interfaces";
 interface Props {
   reservation: ReservationWithDetails;
   currentReservations: ReservationDataShort[];
+  blocked: { dates: Object; times: Object };
 }
 
-const EditReservation: FC<Props> = ({ reservation, currentReservations }) => {
+const EditReservation: FC<Props> = ({ reservation, currentReservations, blocked }) => {
   const router = useRouter();
   const { t, i18n } = useTranslation("common");
   const paymentId = router.query.paymentId as string;
@@ -192,7 +193,11 @@ const EditReservation: FC<Props> = ({ reservation, currentReservations }) => {
               {action === Action.Change && (
                 <>
                   <section className={dateStyles.reservationDate}>
-                    <Calendar currentReservations={currentReservations} isExistingReservation={true} />
+                    <Calendar
+                      currentReservations={currentReservations}
+                      isExistingReservation={true}
+                      blocked={blocked}
+                    />
                     <div className={reservationStyles.reservation__barion__container}>
                       <div className={reservationStyles.reservation__updated}>
                         <button

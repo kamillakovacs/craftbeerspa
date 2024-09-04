@@ -1,12 +1,12 @@
 "use client";
-import { useState } from "react";
+import React, { useState } from "react";
 import AuthForm from "../components/authform";
 import Link from "next/link";
 const Signup: React.FC = () => {
   const [message, setMessage] = useState("");
   const [isSuccessful, setIsSuccessful] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
-  const handleSignup = async (data: { email: string; password: string }) => {
+  const handleSignup = async (data: { id: string; password: string }) => {
     const res = await fetch("/api/auth/password/register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
