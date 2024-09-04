@@ -86,9 +86,9 @@ const Calendar: FC<Props> = ({ currentReservations, isExistingReservation, block
       return false;
     }
 
-    const month = date.getUTCMonth() + 1;
-    const day = date.getUTCDate() + 1;
-    const year = date.getUTCFullYear();
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    const year = date.getFullYear();
     const blockedDates = blocked?.dates?.[year]?.[month]?.[day];
 
     if (blockedDates) {
