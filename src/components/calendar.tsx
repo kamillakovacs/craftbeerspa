@@ -86,10 +86,9 @@ const Calendar: FC<Props> = ({ currentReservations, isExistingReservation, block
       return false;
     }
 
-    const month = date.getUTCMonth() + 1; // months from 1-12
+    const month = date.getUTCMonth() + 1;
     const day = date.getUTCDate() + 1;
     const year = date.getUTCFullYear();
-
     const blockedDates = blocked?.dates?.[year]?.[month]?.[day];
 
     if (blockedDates) {
@@ -136,6 +135,16 @@ const Calendar: FC<Props> = ({ currentReservations, isExistingReservation, block
     if (!currentReservations || !values.date) {
       return false;
     }
+
+    const month = values.date.getMonth() + 1;
+    const day = values.date.getDate();
+    const year = values.date.getFullYear();
+    const blockedTimes = blocked?.times?.[year]?.[month]?.[day]?.[time];
+
+    if (blockedTimes) {
+      return true;
+    }
+
     const reservationsOnDateAndTime = Object.values(currentReservations).filter((res) => {
       if (time === null || time === undefined) {
         return;
