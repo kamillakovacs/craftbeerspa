@@ -201,10 +201,10 @@ export async function getServerSideProps({ locale }) {
   const customerAlreadyInDatabase = Object.values(users).filter((user) => {
     if (user.firstName) {
       return (
-        user.firstName.toLowerCase() === user.firstName.toLowerCase() &&
-        user.lastName.toLowerCase() === user.lastName.toLowerCase() &&
-        user.phoneNumber.toLowerCase() === user.phoneNumber.toLowerCase() &&
-        user.email.toLowerCase() === user.email.toLowerCase()
+        user?.firstName.toLowerCase() === user?.firstName.toLowerCase() &&
+        user?.lastName.toLowerCase() === user?.lastName.toLowerCase() &&
+        user?.phoneNumber.toLowerCase() === user?.phoneNumber.toLowerCase() &&
+        user?.email.toLowerCase() === user?.email.toLowerCase()
       );
     }
   }).length;

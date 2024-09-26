@@ -98,10 +98,10 @@ export async function getServerSideProps({ query, locale }) {
     Object.values(users).filter((user) => {
       if (user?.firstName) {
         return (
-          user.firstName.toLowerCase() === reservation.firstName.toLowerCase() &&
-          user.lastName.toLowerCase() === reservation.lastName.toLowerCase() &&
-          user.phoneNumber.toLowerCase() === reservation.phoneNumber.toLowerCase() &&
-          user.email.toLowerCase() === reservation.email.toLowerCase()
+          user?.firstName.toLowerCase() === reservation?.firstName.toLowerCase() &&
+          user?.lastName.toLowerCase() === reservation?.lastName.toLowerCase() &&
+          user?.phoneNumber.toLowerCase() === reservation?.phoneNumber.toLowerCase() &&
+          user?.email.toLowerCase() === reservation?.email.toLowerCase()
         );
       }
     }).length > 0;
